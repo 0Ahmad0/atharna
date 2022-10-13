@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:atharna/helpers/helpers.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../../model/const.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,25 +15,11 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with AppHelper {
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
 
   // final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  int activeIndex = 0;
-
-  @override
-  void initState() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      setState(() {
-        activeIndex++;
-
-        if (activeIndex == 4) activeIndex = 0;
-      });
-    });
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> with AppHelper {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       return true;
     }
-    showSnackBar(
+    Const.showSnackBar(
       context,
       message: 'Enter required data!',
       error: true,
@@ -242,6 +230,6 @@ class _LoginScreenState extends State<LoginScreen> with AppHelper {
   }
 
   Future<void> login() async {
-    Navigator.pushReplacementNamed(context, '/home_screen');
+    Navigator.pushReplacementNamed(context, '/nav_bar_screen');
   }
 }

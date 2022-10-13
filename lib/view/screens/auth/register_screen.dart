@@ -1,11 +1,12 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:atharna/helpers/helpers.dart';
-import 'package:atharna/screens/auth/verification_screen.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:atharna/widgets/textfeild_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+
+import '../../../model/const.dart';
+import 'verification_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> with AppHelper {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -392,7 +393,7 @@ class _RegisterScreenState extends State<RegisterScreen> with AppHelper {
     if (nameController.text.isNotEmpty && emailController.text.isNotEmpty && phoneController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       return true;
     }
-    showSnackBar(
+    Const.showSnackBar(
       context,
       message: 'Enter required data!',
       error: true,

@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'view/resources/color_manager.dart';
-import 'view/resources/style_manager.dart';
-import 'view/resources/values_manager.dart';
-import 'view/widgets/custome_button.dart';
+import '../view/resources/color_manager.dart';
+import '../view/resources/style_manager.dart';
+import '../view/resources/values_manager.dart';
+import '../view/widgets/custome_button.dart';
 import 'sizer.dart';
 
 class Const{
- void showSnackBar(BuildContext context,
+ static void showSnackBar(BuildContext context,
       {required String message, bool error = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
