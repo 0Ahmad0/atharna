@@ -1,4 +1,5 @@
 
+import 'package:atharna/controller/add_ruin_provider.dart';
 import 'package:atharna/controller/home_provider.dart';
 import 'package:atharna/controller/nav_bar_provider.dart';
 import 'package:atharna/view/screens/add_ruins/add_ruin_screen.dart';
@@ -20,15 +21,15 @@ void main() {
   runApp(const MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
       ChangeNotifierProvider(create: (_)=>NavBarProvider()),
       Provider<HomeProvider>(create: (_)=>HomeProvider()),
+      Provider<AddRuinProvider>(create: (_)=>AddRuinProvider()),
 
     ],
     child:  MaterialApp(
@@ -43,9 +44,9 @@ class MyApp extends StatelessWidget {
             '/nav_bar_screen': (context) => const NavBarScreen(),
             '/home_screen': (context) =>  HomeScreen(),
             '/search_screen': (context) =>  SearchScreen(),
-            '/add_ruin_screen': (context) => const AddRuinScreen(),
+            '/add_ruin_screen': (context) =>  AddRuinScreen(),
             '/favorite_screen': (context) => const FavoriteScreen(),
-            '/profile_screen': (context) => const ProfileScreen(),
+            '/profile_screen': (context) =>  ProfileScreen(),
 
           },
         )

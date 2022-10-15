@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     bool _isObscure = true;
     return Scaffold(
-        backgroundColor: whit,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(

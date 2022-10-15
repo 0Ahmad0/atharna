@@ -41,6 +41,7 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+
       onTap:        widget.onTap,
       readOnly: widget.readOnly,
       controller: widget.controller,
@@ -53,7 +54,8 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
       onChanged: widget.onChange,
       onFieldSubmitted: widget.onSubmit,
       decoration: InputDecoration(
-
+   contentPadding: EdgeInsets.symmetric(vertical: 10),
+   
         prefixIcon:
           Icon(widget.prefixIcon),
         suffixIcon: widget.suffixIcon,

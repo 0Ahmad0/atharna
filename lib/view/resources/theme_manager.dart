@@ -40,8 +40,8 @@ class MyTheme {
           color: ColorManager.error, fontSize: FontSize.s14),
 
       enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSize.s8)
-
+          borderRadius: BorderRadius.circular(AppSize.s8),
+          borderSide: BorderSide(color: ColorManager.lightGray)
       ),
 
       focusedBorder: OutlineInputBorder(

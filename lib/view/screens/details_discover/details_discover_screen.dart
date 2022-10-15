@@ -1,4 +1,5 @@
 import 'package:atharna/model/sizer.dart';
+import 'package:atharna/view/screens/map_location.dart/map_location_screen.dart';
 import 'package:atharna/view/widgets/custome_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -65,65 +66,72 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
           height: Sizer.getH(context) / 2,
           decoration: BoxDecoration(color: ColorManager.white,borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.s50),),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-                Text("Description",style: TextStyle(
-            color: ColorManager.black,
-            fontSize: Sizer.getW(context) / 16,
-            fontWeight: FontWeight.bold
-           ),),
-           const SizedBox(height: AppSize.s20,),
-           Text(cap,style: TextStyle(color: ColorManager.lightGray,
-           fontSize: Sizer.getW(context) / 24,
-           height: 1.3
-           ),),
-           const SizedBox(height: AppSize.s40,),
-           Expanded(child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              buildDetailsRow(context,
-              lable: "COMMENTS",
-              child:                 IconButton(onPressed: (){}, icon: Icon(Icons.comment,size: Sizer.getW(context) * 0.08,)),
-
-              ),
-               buildDetailsRow(context,
-              lable: "RATING",
-              child:Row(
-                children: [
-                  Text("4.5",style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: Sizer.getW(context) * 0.08,
-                    fontWeight: FontWeight.bold
-                  ),),
-                  Text("/5",style: TextStyle(
-                    color: ColorManager.lightGray,
-                    fontSize: Sizer.getW(context) * 0.04,                    
-                  ),)
-                ],
-              )                 
-              )
-              ,buildDetailsRow(context,
-              lable: "REVIEWS",
-              child:Row(
-                children: [
-                  Text("320",style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: Sizer.getW(context) * 0.08,
-                    fontWeight: FontWeight.bold
-                  ),),
-                  Text(" comments",style: TextStyle(
-                    color: ColorManager.lightGray,
-                    fontSize: Sizer.getW(context) * 0.025,                    
-                  ),)
-                ],
-              )                 
-              )
-           
-            ],
-           )),
-           ButtonApp(text: "Get Map", onTap: (){})
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                  Text("Description",style: TextStyle(
+              color: ColorManager.black,
+              fontSize: Sizer.getW(context) / 16,
+              fontWeight: FontWeight.bold
+             ),),
+             const SizedBox(height: AppSize.s20,),
+             Text(cap,style: TextStyle(color: ColorManager.lightGray,
+             fontSize: Sizer.getW(context) / 24,
+             height: 1.3
+             ),),
+             const SizedBox(height: AppSize.s20,),
+             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                buildDetailsRow(context,
+                lable: "COMMENTS",
+                child:                 IconButton(onPressed: (){}, icon: Icon(Icons.comment,size: Sizer.getW(context) * 0.08,)),
+          
+                ),
+                 buildDetailsRow(context,
+                lable: "RATING",
+                child:Row(
+                  children: [
+                    Text("4.5",style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: Sizer.getW(context) * 0.08,
+                      fontWeight: FontWeight.bold
+                    ),),
+                    Text("/5",style: TextStyle(
+                      color: ColorManager.lightGray,
+                      fontSize: Sizer.getW(context) * 0.04,                    
+                    ),)
+                  ],
+                )                 
+                )
+                ,buildDetailsRow(context,
+                lable: "REVIEWS",
+                child:Row(
+                  children: [
+                    Text("320",style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: Sizer.getW(context) * 0.08,
+                      fontWeight: FontWeight.bold
+                    ),),
+                    Text(" comments",style: TextStyle(
+                      color: ColorManager.lightGray,
+                      fontSize: Sizer.getW(context) * 0.025,                    
+                    ),)
+                  ],
+                )                 
+                )
+             
+              ],
+             ),
+             const SizedBox(height: AppSize.s20,),
+      
+             ButtonApp(text: "Get Map",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>MapLocation(
+              latitude: 33.3565978751,
+              longitude: 36.235787455,
+             ))), )
+              ],
+            ),
           ),
         ),
         Positioned(
@@ -172,3 +180,4 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
             );
   }
 }
+

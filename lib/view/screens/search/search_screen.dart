@@ -18,7 +18,7 @@ class SearchScreen extends StatelessWidget {
            maxLength: null,
             onChange: null,
             suffixIcon: IconButton(onPressed: (){},icon: Icon(Icons.search),),
-             prefixIcon: Icons.no_accounts,
+             prefixIcon: Icons.search,
               hintText: "search here"
               ),
         ),

@@ -44,6 +44,11 @@ dependencies:
   loading_animation_widget: ^1.2.0+3
   get_storage: ^2.0.3
   cloud_firestore: ^3.5.1
+  image_picker: ^0.8.6
+  flutter_osm_plugin: ^0.40.3
+  dotted_border:
+  percent_indicator: ^4.2.2
+  cached_network_image: ^3.2.2
 
 dev_dependencies:
   flutter_test:

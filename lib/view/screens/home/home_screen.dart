@@ -21,7 +21,6 @@ class HomeScreen extends StatelessWidget {
   HomeProvider homeProvider = HomeProvider();
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -32,17 +31,22 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             buildAppBarHome(context),
+
            const SizedBox(height: AppSize.s10,),
+           
            Text("Discover",style: TextStyle(
             color: ColorManager.black,
             fontSize: Sizer.getW(context) / 16,
             fontWeight: FontWeight.bold
            ),),
            const SizedBox(height: AppSize.s10,),
+
            ChangeNotifierProvider<HomeProvider>.value(
             value: HomeProvider(),
             child: Consumer<HomeProvider>(
-              builder: (context, value, child) => SizedBox(height: Sizer.getW(context)*0.1,child: ListView.builder(
+              builder: (context, value, child) => SizedBox(
+                height: Sizer.getW(context)*0.1,
+                child: ListView.builder(
               scrollDirection: Axis.horizontal,
                           itemCount: word.length,
                           itemBuilder: ((context, index) =>  InkWell(
@@ -56,20 +60,22 @@ class HomeScreen extends StatelessWidget {
                                       duration: const Duration(milliseconds: 300),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(AppSize.s4),
-                            color: value.selectIndex==index?Theme.of(context).primaryColor.withOpacity(.8):Colors.transparent,
+                            color: value.selectIndex==index?
+                            Theme.of(context).primaryColor:Colors.transparent,
                           ),
                           padding: const EdgeInsets.all(AppPadding.p4),
-                          margin:  EdgeInsets.only(left:index==0?0:AppMargin.m8),
+                          margin:  EdgeInsets.only(left:index==0?0:AppMargin.m4),
                           child: Text(word[index],
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: value.selectIndex==index ?ColorManager.white:ColorManager.black),),
+                          style: TextStyle(color: value.selectIndex==index 
+                          ?ColorManager.white:ColorManager.black),),
                         ),
                       )
                  ),
                         ),)),
             ),
            
-                      const SizedBox(height: AppSize.s10,),
+            const SizedBox(height: AppSize.s10,),
             buildDiscover(context),
            const SizedBox(height: AppSize.s10,),
            Text("Categories",style: TextStyle(
@@ -147,7 +153,8 @@ class HomeScreen extends StatelessWidget {
             itemCount: 10,
             itemBuilder: (context, index) => GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (ctx)=>DetailsDiscoverScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (ctx)=>
+                DetailsDiscoverScreen()));
               },
               child: Container(
                 padding: const EdgeInsets.all(AppPadding.p12),
@@ -188,7 +195,9 @@ class HomeScreen extends StatelessWidget {
     return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.menu)),
+              IconButton(onPressed: (){
+                Scaffold.of(context).openDrawer();
+              }, icon: Icon(Icons.menu)),
               Container(
                 width: Sizer.getW(context) * 0.125,
                 height: Sizer.getW(context) * 0.125,
