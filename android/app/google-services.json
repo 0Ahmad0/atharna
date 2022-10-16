@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "822507437610",
+    "project_id": "atharna-8f15b",
+    "storage_bucket": "atharna-8f15b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822507437610:android:6bf4f4fc75a3bb08270d53",
+        "android_client_info": {
+          "package_name": "com.example.atharna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822507437610-ug6g4vfnhuu1rtlr84grmaq2gj8tmqpd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.atharna",
+            "certificate_hash": "0f909bc5ba475070e481ce06eff8216e9f475732"
+          }
+        },
+        {
+          "client_id": "822507437610-5mght6upr23rf50o8hmkq9mq8sr8veps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXYbe07S-pKD_adT6KHLHSoT8KAON4Qu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822507437610-5mght6upr23rf50o8hmkq9mq8sr8veps.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -49,6 +49,9 @@ dependencies:
   dotted_border:
   percent_indicator: ^4.2.2
   cached_network_image: ^3.2.2
+  firebase_core: ^1.22.0
+  firebase_auth: ^3.8.0
+  firebase_storage: ^8.0.3
 
 dev_dependencies:
   flutter_test:

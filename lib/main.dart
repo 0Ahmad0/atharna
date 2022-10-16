@@ -8,6 +8,7 @@ import 'package:atharna/view/screens/home/home_screen.dart';
 import 'package:atharna/view/screens/nav_bar/nav_bar_screen.dart';
 import 'package:atharna/view/screens/profile/profile_screen.dart';
 import 'package:atharna/view/screens/search/search_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,10 @@ import 'view/screens/auth/login_screen.dart';
 import 'view/screens/auth/onboarding_screen.dart';
 import 'view/screens/auth/register_screen.dart';
 
-void main() {
+Future<void> main() async {
+  await WidgetsFlutterBinding.ensureInitialized();
+  //await CustomGalleryPermissions.requestPermissionExtend();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
