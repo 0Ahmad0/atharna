@@ -28,6 +28,14 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+   static signupPho( {required String email,required String password})  async {
+    final result=await auth.createUserWithEmailAndPassword(
+      email: email,///"temp@gmail.com",
+      password: password,///"123456"
+    ).then((onValueSignup))
+        .catchError(onError);
+    return result;
+  }
    static createUser( {required model.User user}) async {
      final result= await FirebaseFirestore.instance.collection(user.typeUser).add(
        user.toJson()

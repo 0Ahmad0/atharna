@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:atharna/controller/auth_provider.dart';
+import 'package:atharna/controller/utils/firebase.dart';
 import 'package:atharna/model/models.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
@@ -420,7 +421,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.push(context, MaterialPageRoute(builder: (context) => VerificatoinScreen()));
+     Navigator.push(context, MaterialPageRoute(builder: (context) => VerificatoinScreen()));
     });
   }
 }

@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:atharna/controller/utils/firebase.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../controller/auth_provider.dart';
 import '../../../model/const.dart';
 
 
@@ -20,9 +23,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
+  late AuthProvider authProvider;
 
   @override
   Widget build(BuildContext context) {
+    authProvider = Provider.of<AuthProvider>(context);
     bool _isObscure = true;
     return Scaffold(
         body: SafeArea(
@@ -57,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     delay: Duration(milliseconds: 150),
                     child: Text(
                       'Email Address',
-                    
+
                     ),
                   ),
                   SizedBox(
@@ -103,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     delay: Duration(milliseconds: 250),
                     child: Text(
                       'Password',
-                  
+
                     ),
                   ),
                   SizedBox(
@@ -173,12 +179,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   FadeInDown(
                     delay: Duration(milliseconds: 400),
                     child: Center(
-                      child: WidgetButton(
+                      child:
+                      WidgetButton(
                         buttonColor: color1,
                         width: MediaQuery.of(context).size.width,
-                        text: 'Login',
+                        text:_isLoading?
+                            '${FirebaseFun.findTextToast("Loading ..")}':
+                        'Login',
                         onPress: () {
-                          performLogin();
+                          !_isLoading?
+                          performLogin():"";
                         },
                       ),
                     ),
@@ -229,6 +239,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> login() async {
-    Navigator.pushReplacementNamed(context, '/nav_bar_screen');
+    setState(() {
+      _isLoading = true;
+    });
+    authProvider.email =emailController;
+    authProvider.password = passwordController;
+   final result =await authProvider.login(context);
+    setState(() {
+      _isLoading = false;
+    });
+    if(result['status']){
+      Navigator.pushReplacementNamed(context, '/nav_bar_screen');
+    }
+
   }
 }

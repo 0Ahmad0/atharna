@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:atharna/controller/utils/firebase.dart';
 import 'package:atharna/widgets/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -171,7 +172,9 @@ class _VerificatoinScreenState extends State<VerificatoinScreen> {
                       }
                           : () async {
                               verify();
-                           //   print("f ${await FirebaseFun.auth.pho(phoneNumber)}");
+                             // PhoneAuthCredential phone;
+                             // FirebaseFun.auth.signInWithPhoneNumber("+963937954969");
+                             // print("f ${await FirebaseFun.auth.currentUser.phoneNumber}");
                             },
                       color: color1,
                       minWidth: MediaQuery.of(context).size.width * 0.8,

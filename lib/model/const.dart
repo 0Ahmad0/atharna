@@ -7,8 +7,10 @@ import '../view/resources/style_manager.dart';
 import '../view/resources/values_manager.dart';
 import '../view/widgets/custome_button.dart';
 import 'sizer.dart';
+import 'package:get/get.dart';
 
 class Const{
+
  static void showSnackBar(BuildContext context,
       {required String message, bool error = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
