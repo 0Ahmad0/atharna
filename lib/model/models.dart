@@ -24,8 +24,6 @@ class User {
   String password;
   String typeUser;
   String description;
-  String serialNumber;
-  List listUsedQuizzes;
   User(
       {required this.id,
       required this.uid,
@@ -35,11 +33,9 @@ class User {
       required this.password,
         required this.typeUser,
         required this.photoUrl,
-         required this.listUsedQuizzes,
-        this.description="",
-        this.serialNumber=""});
+        this.description="",});
   factory User.fromJson( json){
-    String tempSerialNumber="";
+
     return User(id: json['id'],
                 uid: json["uid"],
                 name: json["name"],
@@ -48,8 +44,6 @@ class User {
                 password: json["password"],
                 typeUser: json["typeUser"],
               photoUrl: json["photoUrl"],
-              serialNumber: json["serialNumber"],
-               listUsedQuizzes:json["listUsedQuizzes"],
                description: (json["description"]!=null)?json["description"]:"");
   }
   Map<String,dynamic> toJson()=>{
@@ -60,9 +54,7 @@ class User {
     'phoneNumber':phoneNumber,
     'password':password,
     'typeUser':typeUser,
-    'serialNumber':serialNumber,
     'photoUrl':photoUrl,
-    'listUsedQuizzes':listUsedQuizzes,
     'description':description,
   };
 }
@@ -97,22 +89,6 @@ class Users {
 }
 
 
-//Doctor
-class Doctor {
-  String id;
-  String name;
-  String carer;
-  String description;
-
-  Doctor(
-      {required this.id,
-      required this.name,
-      required this.carer,
-      required this.description});
-  factory Doctor.fromUser(User user){
-    return Doctor(id: user.id, name: user.name, carer: user.photoUrl, description: user.description);
-  }
-}
 
 
 /*

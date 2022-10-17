@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:atharna/controller/utils/firebase.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -165,9 +166,12 @@ class _VerificatoinScreenState extends State<VerificatoinScreen> {
                     child: MaterialButton(
                       elevation: 0,
                       onPressed: _code.length < 4
-                          ? () => {}
-                          : () {
+                          ? () => {
+
+                      }
+                          : () async {
                               verify();
+                           //   print("f ${await FirebaseFun.auth.pho(phoneNumber)}");
                             },
                       color: color1,
                       minWidth: MediaQuery.of(context).size.width * 0.8,

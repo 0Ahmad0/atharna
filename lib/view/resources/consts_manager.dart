@@ -32,12 +32,8 @@ class AppConstants {
   //collection
   static String collection = "";
   static String collectionAdmin = "Admin";
-  static String collectionDoctor = "Doctor";
-  static String collectionPatient = "Patient";
-  static String collectionGroup = "Group";
-  static String collectionChat = "Chat";
-  static String collectionSession = "Session";
-  static String collectionPaySession = "PaySession";
+  static String collectionCompany = "Company";
+  static String collectionUser = "User";
 
 
 }

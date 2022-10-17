@@ -1,9 +1,12 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:atharna/controller/auth_provider.dart';
+import 'package:atharna/model/models.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:atharna/widgets/textfeild_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/const.dart';
 import 'verification_screen.dart';
@@ -22,9 +25,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordConfirmationController = TextEditingController();
   bool _isLoading = false;
+  late AuthProvider authProvider;
 
   @override
   Widget build(BuildContext context) {
+    authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -405,7 +410,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       _isLoading = true;
     });
-
+    authProvider.name = nameController;
+    authProvider.email =emailController;
+    authProvider.phoneNumber = phoneController;
+    authProvider.password = passwordController;
+    authProvider.confirmPassword = passwordConfirmationController;
+    await authProvider.signup(context);
     Future.delayed(Duration(milliseconds: 800), () {
       setState(() {
         _isLoading = false;

@@ -1,5 +1,6 @@
 
 import 'package:atharna/controller/add_ruin_provider.dart';
+import 'package:atharna/controller/auth_provider.dart';
 import 'package:atharna/controller/home_provider.dart';
 import 'package:atharna/controller/nav_bar_provider.dart';
 import 'package:atharna/view/screens/add_ruins/add_ruin_screen.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'controller/profile_provider.dart';
 import 'view/resources/theme_manager.dart';
 import 'view/screens/auth/launch_screen.dart';
 import 'view/screens/auth/login_screen.dart';
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
       ChangeNotifierProvider(create: (_)=>NavBarProvider()),
       Provider<HomeProvider>(create: (_)=>HomeProvider()),
       Provider<AddRuinProvider>(create: (_)=>AddRuinProvider()),
+      ListenableProvider<AuthProvider>(create: (_) => AuthProvider()),
+      ListenableProvider<ProfileProvider>(create: (_)=>ProfileProvider()),
 
     ],
     child:  MaterialApp(
