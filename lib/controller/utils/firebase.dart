@@ -87,8 +87,22 @@ class FirebaseFun{
       }
       return result;
    }
+   static updateUserEmail( {required model.User user}) async {
+      final result =await auth.currentUser?.updateEmail(
+         user.email
+     ).then(onValueUpdateUser)
+         .catchError(onError);
+      if(result!['status']){
+        return {
+          'status':true,
+          'message':'User Email successfully update',
+          'body': user.toJson()
+        };
+      }
+      return result;
+   }
   static login( {required String email,required String password})  async {
-    final result=await FirebaseAuth.instance.signInWithEmailAndPassword(
+    final result=await auth.signInWithEmailAndPassword(
       email: email,///"temp@gmail.com",
       password: password,///"123456"
     ).then((onValuelogin))
@@ -151,7 +165,7 @@ class FirebaseFun{
   static Future<Map<String,dynamic>> onValueUpdateUser(value) async{
     return {
       'status':true,
-      'message':'Account successfully created',
+      'message':'Account successfully update',
     //  'body': user.toJson()
     };
   }

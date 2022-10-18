@@ -17,44 +17,44 @@ import '../../resources/values_manager.dart';
 import '../../widgets/custome_button.dart';
 import '../../widgets/custome_textfiled.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
    ImagePicker picker = ImagePicker();
 
   XFile? image;
+
   Map<String , dynamic> locationHeritage ={
     "latitude": "",
     "longitude":""
   };
+
   pickFromCamera() async {
     image = await picker.pickImage(source: ImageSource.camera);
+    setState(() {});
   }
 
   pickFromGallery() async {
     image = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {});
   }
-   removeGallery() async {
-     image =  XFile("");
-   }
-   Future uploadImage() async {
-     try {
-       String path = basename(image!.path);
-       print(image!.path);
-       File file =File(image!.path);
 
-       Reference storage = FirebaseStorage.instance.ref().child("profileImage/${path}");
-       UploadTask storageUploadTask = storage.putFile(file);
-       TaskSnapshot taskSnapshot = await storageUploadTask;
-       //Const.LOADIG(context);
-       String url = await taskSnapshot.ref.getDownloadURL();
-       //Navigator.of(context).pop();
-       print('url $url');
-       return url;
-     } catch (ex) {
-       //Const.TOAST( context,textToast:FirebaseFun.findTextToast("Please, upload the image"));
-     }
+   removeGallery() async {
+     image =null ;
+     profileProvider.user.photoUrl=" ";
+     ///print(" ${image==null}");
+     setState(() {});
    }
+
+
+
   bool nameIgnor = false;
+
    late ProfileProvider profileProvider;
+
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
@@ -280,9 +280,10 @@ class ProfileScreen extends StatelessWidget {
                           return ButtonApp(
                               text: "Edit",
                               onTap: () async {
-                                if(image!=null)
+
                                   Const.LOADIG(context);
-                                  await profileProvider.uploadImage(context, image!);
+                                  if(image!=null)
+                                await profileProvider.uploadImage(context, image!);
                                 await profileProvider.editUser(context);
                                 Navigator.of(context).pop();
                                // emailIgnor = true;
