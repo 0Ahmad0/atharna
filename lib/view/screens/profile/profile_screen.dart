@@ -1,13 +1,18 @@
 import 'dart:io';
 
+import 'package:atharna/controller/profile_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:provider/provider.dart';
+import 'package:path/path.dart';
 import '../../../model/const.dart';
 import '../../../model/sizer.dart';
+import '../../../widgets/picture/cach_picture_widget.dart';
+import '../../../widgets/picture/profile_picture_widget.dart';
 import '../../resources/values_manager.dart';
 import '../../widgets/custome_button.dart';
 import '../../widgets/custome_textfiled.dart';
@@ -27,11 +32,32 @@ class ProfileScreen extends StatelessWidget {
   pickFromGallery() async {
     image = await picker.pickImage(source: ImageSource.gallery);
   }
+   removeGallery() async {
+     image =  XFile("");
+   }
+   Future uploadImage() async {
+     try {
+       String path = basename(image!.path);
+       print(image!.path);
+       File file =File(image!.path);
 
+       Reference storage = FirebaseStorage.instance.ref().child("profileImage/${path}");
+       UploadTask storageUploadTask = storage.putFile(file);
+       TaskSnapshot taskSnapshot = await storageUploadTask;
+       //Const.LOADIG(context);
+       String url = await taskSnapshot.ref.getDownloadURL();
+       //Navigator.of(context).pop();
+       print('url $url');
+       return url;
+     } catch (ex) {
+       //Const.TOAST( context,textToast:FirebaseFun.findTextToast("Please, upload the image"));
+     }
+   }
   bool nameIgnor = false;
-
+   late ProfileProvider profileProvider;
   @override
   Widget build(BuildContext context) {
+    profileProvider = Provider.of<ProfileProvider>(context);
     return   Container(
               padding: EdgeInsets.symmetric(
                   vertical: AppPadding.p10, horizontal: AppPadding.p16),
@@ -52,27 +78,22 @@ class ProfileScreen extends StatelessWidget {
                                     width: AppSize.s4)),
                             child: image == null
                                 ? ClipOval(
-                                child: CachedNetworkImage(
-                              fit: BoxFit.fill,
-                              width: Sizer.getW(context) * 0.14,
-                              height: Sizer.getW(context) * 0.14,
-                              imageUrl:
-                              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                              "https://static.remove.bg/remove-bg-web/c05ac62d076574fad1fbc81404cd6083e9a4152b/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png",
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
-                                        //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
-                                      ),
-                                    ),
+                                child:
+                                CacheNetworkImage(
+                                  photoUrl: '${profileProvider.user.photoUrl}',
+                                  width: Sizer.getW(context) * 0.14,
+                                  height: Sizer.getW(context) * 0.14,
+                                  waitWidget: WidgetProfilePicture(
+                                    name: profileProvider.user.name,
+                                    radius: AppSize.s30,
+                                    fontSize: Sizer.getW(context) / 10,
                                   ),
-                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                             
-                            ))
+                                  errorWidget: WidgetProfilePicture(
+                                    name: profileProvider.user.name,
+                                    radius: AppSize.s30,
+                                    fontSize: Sizer.getW(context) / 10,
+                                  ),
+                                ))
                                 : ClipOval(
                                     child: Image.file(File(image!.path),
                                       fit: BoxFit.fill,
@@ -151,6 +172,32 @@ class ProfileScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
+                                                  Divider(
+                                                    height: 0.0,
+                                                  ),
+                                                  Expanded(
+                                                    child: InkWell(
+                                                      onTap: ()  {
+
+                                                        removeGallery();
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Container(
+                                                        alignment: Alignment.center,
+                                                        padding: EdgeInsets.all(
+                                                            AppPadding.p8),
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(Icons.delete),
+                                                            const SizedBox(
+                                                              width: AppSize.s8,
+                                                            ),
+                                                            Text("Remove"),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -174,7 +221,7 @@ class ProfileScreen extends StatelessWidget {
                               setState1(() {});
                             },
                             readOnly: nameIgnor,
-                            controller: TextEditingController(),
+                            controller: profileProvider.name, //TextEditingController(),
                             validator: (String? val) {
                               if (val!.isEmpty) {
                                 return "reqired filed";
@@ -204,7 +251,7 @@ class ProfileScreen extends StatelessWidget {
                               setState2(() {});
                             },
                             readOnly: false,
-                            controller: TextEditingController(),
+                            controller: profileProvider.email,//TextEditingController(),
                             validator: (String? val) {
                               // if (val!.isEmpty) {
                               //   return tr(LocaleKeys.field_required);
@@ -234,8 +281,11 @@ class ProfileScreen extends StatelessWidget {
                               text: "Edit",
                               onTap: () async {
                                 if(image!=null)
-                                Const.SHOWLOADINGINDECATOR();
+                                  Const.LOADIG(context);
+                                  await profileProvider.uploadImage(context, image!);
+                                await profileProvider.editUser(context);
                                 Navigator.of(context).pop();
+                               // emailIgnor = true;
                                 nameIgnor = true;
                                 setState2(() {});
                               });

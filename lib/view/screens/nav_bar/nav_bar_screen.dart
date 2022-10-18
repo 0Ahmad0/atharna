@@ -12,9 +12,12 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
-import '../../../controller/dprofile_provider.dart';
+//import '../../../controller/dprofile_provider.dart';
+import '../../../controller/profile_provider.dart';
 import '../../../model/const.dart';
 import '../../../model/sizer.dart';
+import '../../../widgets/picture/cach_picture_widget.dart';
+import '../../../widgets/picture/profile_picture_widget.dart';
 import '../../resources/style_manager.dart';
 import '../../resources/values_manager.dart';
 
@@ -57,58 +60,62 @@ class _NavBarScreenState extends State<NavBarScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
     final currentPage = Provider.of<NavBarProvider>(context);
     return Scaffold(
         drawer: Drawer(
               child: Column(
                 children: [
-                    UserAccountsDrawerHeader(
+
+                  ChangeNotifierProvider<ProfileProvider>.value(
+                      value: profileProvider,
+                      child: Consumer<ProfileProvider>(
+                        builder: (context, value, child) =>
+                            UserAccountsDrawerHeader(
                               decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor
+                                  color: Theme.of(context).primaryColor
                               ),
                               margin: EdgeInsets.zero,
                               accountName: Text(
-                               "Ahmad",
+                                //"Ahmad",
+                                '${value.user.name}',
                                 style: getRegularStyle(
                                     color: ColorManager.white,
                                     fontSize: Sizer.getW(context) / 24),
                               ),
                               accountEmail: Text(
-                               "Ahmad@gmail.com",
+                                '${value.user.email}',
+                               // "Ahmad@gmail.com",
                                 style: getLightStyle(
                                     color: ColorManager.white,
                                     fontSize: Sizer.getW(context) / 28),
                               ),
                               currentAccountPicture: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor,
                                     shape: BoxShape.circle,
-                                ),
-                                child:ClipOval(
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.fill,
-                                    width: Sizer.getW(context) * 0.12,
-                                    height: Sizer.getW(context) * 0.12,
-                                    imageUrl:"https://static.remove.bg/remove-bg-web/c05ac62d076574fad1fbc81404cd6083e9a4152b/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png",
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).primaryColor,
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
-                                              //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
-                                            ),
-                                          ),
-                                        ),
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error),
                                   ),
-                                )
+                                  child:ClipOval(
+                                    child:
+                                    CacheNetworkImage(
+                                      photoUrl: '${value.user.photoUrl}',
+                                      width: Sizer.getW(context) * 0.12,
+                                      height:Sizer.getW(context) * 0.12,
+                                      waitWidget: WidgetProfilePicture(
+                                        name: profileProvider.user.name,
+                                        radius: AppSize.s30,
+                                        fontSize: Sizer.getW(context) / 16,
+                                      ),
+                                      errorWidget: WidgetProfilePicture(
+                                        name: profileProvider.user.name,
+                                        radius: AppSize.s30,
+                                        fontSize: Sizer.getW(context) / 16,
+                                      ))
+                                  )
                               ),
                             ),
+                      )),
+
                      
                   _buildListTile(
                     text: "Item1",
@@ -127,8 +134,8 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     text: "Log out",
                     icon: Icons.logout,
                     onTap: () async {
-                      Const.SHOWLOADINGINDECATOR();
-                      // await profileProvider.logout(context);
+                      Const.LOADIG(context);
+                       await profileProvider.logout(context);
                       Navigator.of(context).pop();
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>LoginScreen()));
                     },
@@ -142,7 +149,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
       bottomNavigationBar: Container(                                             
   decoration: BoxDecoration(                                                   
     borderRadius: BorderRadius.only(                                           
-      topRight: Radius.circular(30), topLeft: Radius.circular(30)),            
+      topRight: Radius.circular(30), topLeft: Radius.circular(30)),
     boxShadow: [                                                               
       BoxShadow(color: Colors.black38.withOpacity(.1), spreadRadius: 0, blurRadius: 10),       
     ],                                                                         
@@ -150,7 +157,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
   child: ClipRRect(                                                            
     borderRadius: BorderRadius.only(                                           
     topLeft: Radius.circular(30.0),                                            
-    topRight: Radius.circular(30.0),                                           
+    topRight: Radius.circular(30.0),
     ),                                                                         
     child: Consumer<NavBarProvider>(
       builder: (context, selectIndex, child) => BottomNavigationBar(    

@@ -89,6 +89,7 @@ class AuthProvider with ChangeNotifier{
         await AppStorage.storageWrite(key: AppConstants.uidKEY, value: user.uid);
         await AppStorage.storageWrite(key: AppConstants.tokenKEY, value: "resultUser['token']");
         Advance.token = user.uid;
+        Advance.uid = user.uid;
         email.clear();
         password.clear();
         profileProvider.updateUser(user:User.fromJson(result['body']));

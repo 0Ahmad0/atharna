@@ -11,6 +11,24 @@ import 'package:get/get.dart';
 
 class Const{
 
+  static LOADIG(context){
+    Get.dialog(
+        Center(
+          child: Container(
+              alignment: Alignment.center,
+              width: Sizer.getW(context) * 0.2,
+              height: Sizer.getW(context) * 0.2,
+              decoration: BoxDecoration(
+                  color: ColorManager.white,
+                  borderRadius: BorderRadius.circular(AppSize.s8)),
+              child: LoadingAnimationWidget.waveDots(
+                  color: ColorManager.primary,
+                  size: Sizer.getW(context) * 0.1)),
+        ),
+        barrierDismissible: false
+    );
+  }
+
  static void showSnackBar(BuildContext context,
       {required String message, bool error = false}) {
     ScaffoldMessenger.of(context).showSnackBar(

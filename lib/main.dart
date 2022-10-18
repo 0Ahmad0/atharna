@@ -19,7 +19,7 @@ import 'view/screens/auth/launch_screen.dart';
 import 'view/screens/auth/login_screen.dart';
 import 'view/screens/auth/onboarding_screen.dart';
 import 'view/screens/auth/register_screen.dart';
-
+import 'package:get/get.dart';
 Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   //await CustomGalleryPermissions.requestPermissionExtend();
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       ListenableProvider<ProfileProvider>(create: (_)=>ProfileProvider()),
 
     ],
-    child:  MaterialApp(
+    child:  GetMaterialApp(
      theme: MyTheme.lightTheme,
           debugShowCheckedModeBanner: false,
           initialRoute: '/launch_screen',
