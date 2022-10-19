@@ -88,6 +88,63 @@ class Users {
   }
 }
 
+//user
+class Heritage {
+  String id;
+  String userId;
+  String firstName;
+  String lastName;
+  String photoUrl;
+  String heritageType;
+  double latitude;
+  double longitude;
+  String description;
+ List<String> listFavoriteUserID;
+  Map<String,dynamic> listUserComment;
+  Heritage(
+      {required this.id,
+      required this.userId,
+        required this.firstName,
+        required this.lastName,
+        required this.photoUrl,
+        required this.heritageType,
+        required this.latitude,
+        required this.longitude,
+         this.listFavoriteUserID=const[],
+         this.listUserComment=const{},
+        this.description="",});
+  factory Heritage.fromJson( json){
+    var data=json.data();
+    List<String> tempListFavoriteUserID = [];
+    for(String user in data["listFavoriteUserID"]){
+      tempListFavoriteUserID.add(user);
+    }
+    return Heritage(id: data['id'],
+        userId: data["userId"],
+        firstName: data["firstName"],
+        lastName: data["lastName"],
+        photoUrl: data["photoUrl"],
+        heritageType: data["heritageType"],
+        latitude: data["latitude"],
+        longitude: data["longitude"],
+        listUserComment: data["listUserComment"],
+        listFavoriteUserID: tempListFavoriteUserID,
+        description: (data["description"]!=null)?data["description"]:"");
+  }
+  Map<String,dynamic> toJson()=>{
+    'id':id,
+    'userId':userId,
+    'firstName':firstName,
+    'lastName':lastName,
+    'photoUrl':photoUrl,
+    'heritageType':heritageType,
+    'latitude':latitude,
+    'photoUrl':photoUrl,
+    'listUserComment':listUserComment,
+    'listFavoriteUserID':listFavoriteUserID,
+    'description':description,
+  };
+}
 
 
 

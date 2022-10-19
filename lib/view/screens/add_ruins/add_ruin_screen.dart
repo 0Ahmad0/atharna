@@ -202,7 +202,7 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                   ],
                                  ),
                                  const SizedBox(height: AppSize.s20,),
-                                 Row(
+                Expanded(child:Row(
                                   children: [
                                     Expanded(
                                       child: Column(
@@ -219,8 +219,8 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                         ],
                                       ),
                                     ),
-                                                                     const SizedBox(width: AppSize.s20,),
-Expanded(child: Row(
+                                    const SizedBox(width: AppSize.s20,),
+                                    Expanded(child: Row(
 children: [
   Expanded(child: Container(
         decoration: BoxDecoration(
@@ -243,7 +243,7 @@ children: [
 ],
 ))
                                   ],
-                                 ),
+                                 ),)
 
             
               ]
