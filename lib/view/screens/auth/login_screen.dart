@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:atharna/controller/heritage_provider.dart';
+import 'package:atharna/controller/utils/create_environment_provider.dart';
 import 'package:atharna/controller/utils/firebase.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
@@ -211,6 +213,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         )
                       ],
+                    ),
+                  ),
+                  FadeInDown(
+                    delay: Duration(milliseconds: 400),
+                    child: Center(
+                      child:
+                      WidgetButton(
+                        buttonColor: color1,
+                        width: MediaQuery.of(context).size.width,
+                        text: 'done',
+                        onPress: () async {
+                          Const.LOADIG(context);
+                        /// await CreateEnvironmentProvider().createHeritageTypes(context);
+                          ///await HeritageProvider().fetchHeritages();
+                          await HeritageProvider().fetchHeritageTypes();
+                          Navigator.pop(context);
+                        },
+                      ),
                     ),
                   ),
                 ],

@@ -1,4 +1,6 @@
 import 'package:atharna/controller/add_ruin_provider.dart';
+import 'package:atharna/controller/create_heritage_provider.dart';
+import 'package:atharna/model/const.dart';
 import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/color_manager.dart';
 import 'package:atharna/view/resources/values_manager.dart';
@@ -13,14 +15,18 @@ import 'dart:io';
 
 import 'package:provider/provider.dart';
 
+import '../../../controller/profile_provider.dart';
+import '../../../controller/utils/firebase.dart';
+
 class AddRuinScreen extends StatelessWidget {
   final firstName = TextEditingController();
   final lastName = TextEditingController();
   final heritageType = TextEditingController(text: '');
   final formKey = GlobalKey<FormState>();
-   
+  late ProfileProvider profileProvider;
   @override
   Widget build(BuildContext context) {
+     profileProvider = Provider.of<ProfileProvider>(context);
     return  Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppPadding.p16,
@@ -31,11 +37,11 @@ class AddRuinScreen extends StatelessWidget {
         children: [
           ChangeNotifierProvider(
             create: (_)=>AddRuinProvider(),
-child:                      Consumer<AddRuinProvider>(builder: ((context, value, child) => buildFormInfoHeritage(context,value))),
-
+            child:Consumer<AddRuinProvider>(builder: ((context, value, child) => buildFormInfoHeritage(context,value)
+            )),
           ),
-          buildDataHeritage()
-        
+          //buildDataHeritage()
+
         ],
       ),
     );
@@ -46,7 +52,9 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
 
                                children: [
                                 Expanded(child: SizedBox()),
-                                 Expanded(child: ElevatedButton(onPressed: (){}, child: Row(
+                                 Expanded(child: ElevatedButton(onPressed: (){
+
+                                 }, child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                    children: [
                                      Text("Submit"),
@@ -82,32 +90,45 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                   fontWeight: FontWeight.bold
                 ),),
                 const SizedBox(height: AppSize.s20,),
-                CustomTextFiled(controller: firstName,
+                CustomTextFiled(controller:value.firstName,
                  validator: (String? val){
                   if(val!.trim().isEmpty){
                     return "This filed reqiured";
                   }
                   return null;
-                 }, onChange: null,
+                 }, onChange: (String? val){
+                      if(val!.trim().isEmpty){
+                        value.changeRateComplete("firstName", false);
+                      }else{
+                        value.changeRateComplete("firstName", true);
+                      }
+                    },
                   prefixIcon: Icons.person,
                   maxLength: null,
                    hintText: "First name"
                    ),
                 const SizedBox(height: AppSize.s20,),
-                CustomTextFiled(controller: lastName,
+                CustomTextFiled(controller: value.lastName,
                  validator: (String? val){
                   if(val!.trim().isEmpty){
                     return "This filed reqiured";
                   }
+
                   return null;
-                 }, onChange: null,
+                 }, onChange: (String? val){
+                      if(val!.trim().isEmpty){
+                        value.changeRateComplete("lastName", false);
+                      }else{
+                        value.changeRateComplete("lastName", true);
+                      }
+                    },
                   prefixIcon: Icons.person,
                   maxLength: null,
                    hintText: "Last name"
                    ),
                 const SizedBox(height: AppSize.s20,),
                 DropdownButtonFormField(
-                  hint: Text(heritageType.text.isEmpty?"Heritage Type":heritageType.text),
+                  hint: Text(value.heritageType.text.isEmpty?"Heritage Type":value.heritageType.text),
                   decoration: InputDecoration(
                        contentPadding: EdgeInsets.symmetric(vertical: AppPadding.p10,horizontal: AppPadding.p10),
                   ),
@@ -119,7 +140,12 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                     )
                   ],
                    onChanged: (val){
-                    heritageType.text = val.toString();
+                    value.heritageType.text = val.toString();
+                      if(val!.trim().isEmpty){
+                        value.changeRateComplete("heritageType", false);
+                      }else{
+                        value.changeRateComplete("heritageType", true);
+                      }
                    },
                    validator: (val){
                     if(val == null){
@@ -137,8 +163,14 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                           Text("Heritage image"),
                                           const SizedBox(height: AppSize.s20,),
                                           InkWell(
-                                            onTap: (){
-                                            selectPhotoDialog(context,value);
+                                            onTap: () async {
+                                            await selectPhotoDialog(context,value);
+                                              if(value.image==null){
+                                                value.changeRateComplete("image", false);
+                                              }else{
+                                                value.changeRateComplete("image", true);
+                                              }
+
                                             },
                                             child: DottedBorder(
                                        borderType: BorderType.RRect,
@@ -172,6 +204,11 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                           InkWell(
                                             onTap: ()async{
                                               await value.pickLocation(context);
+                                              if(value.locationHeritage.values.first.toString().trim().isEmpty){
+                                                value.changeRateComplete("location", false);
+                                              }else{
+                                                value.changeRateComplete("location", true);
+                                              }
                                             },
                                             child: DottedBorder(
                                                  borderType: BorderType.RRect,
@@ -180,10 +217,10 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                  color: ColorManager.lightGray,
                                  strokeWidth: 2,
                                  child: ClipRRect(
-                                borderRadius: BorderRadius.circular(                                           
-              AppSize.s14                                            
-                                               
-              ),                                  
+                                borderRadius: BorderRadius.circular(
+              AppSize.s14
+
+              ),
                                    child: Container(
                                     height: Sizer.getW(context) / 2.2,
                                     decoration: BoxDecoration(
@@ -194,7 +231,7 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                    ),
                                  ),
                                             )
-                              
+
                                             )
                                   ],
                                 ),
@@ -212,8 +249,8 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                  LinearPercentIndicator(
                                   lineHeight: Sizer.getW(context) *0.06,
                                   barRadius: Radius.circular(AppSize.s50),
-                  percent: .75,
-                  center: new Text("75% is Completed",style: TextStyle(color: ColorManager.white),),
+                  percent: value.rateComplete,
+                  center: new Text("${(value.rateComplete*100).floor()}% is Completed",style: TextStyle(color: ColorManager.white),),
                   progressColor: Colors.blue,
                 )
                                         ],
@@ -221,31 +258,41 @@ child:                      Consumer<AddRuinProvider>(builder: ((context, value,
                                     ),
                                     const SizedBox(width: AppSize.s20,),
                                     Expanded(child: Row(
-children: [
-  Expanded(child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).primaryColor,width: 2),
-          borderRadius: BorderRadius.circular(AppSize.s8)
-        ),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, Sizer.getW(context)*0.12),
-            primary: ColorManager.white,
-          ),
-          onPressed: (){},child: Text("Change",style: TextStyle(fontSize: Sizer.getW(context)/32,color: Theme.of(context).primaryColor),),),
-  )),
-                                                                     const SizedBox(width: AppSize.s10,),
-  Expanded(child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, Sizer.getW(context)*0.12),
-          ),
-        onPressed: (){},child: Text("Confirm",style: TextStyle(fontSize: Sizer.getW(context)/32),),)),
-],
-))
+                                      children: [
+                                        /**Expanded(child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(color: Theme.of(context).primaryColor,width: 2),
+                                              borderRadius: BorderRadius.circular(AppSize.s8)
+                                          ),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              minimumSize: Size(double.infinity, Sizer.getW(context)*0.12),
+                                              primary: ColorManager.white,
+                                            ),
+                                            onPressed: (){},child: Text("Change",style: TextStyle(fontSize: Sizer.getW(context)/32,color: Theme.of(context).primaryColor),),),
+                                        )),
+                                        const SizedBox(width: AppSize.s10,),*/
+                                        Expanded(child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize: Size(double.infinity, Sizer.getW(context)*0.12),
+                                          ),
+                                          onPressed: () async {
+                                            if(value.mapComplete.values.length>=5){
+                                              Const.LOADIG(context);
+                                              await value.createHeritage(context, userId: profileProvider.user.id);
+                                              Navigator.pop(context);
+                                            }else{
+                                              Const.TOAST(context,textToast: FirebaseFun.findTextToast("There are empty fields after"));
+                                            }
+
+                                          }
+                                          ,child: Text("Confirm",style: TextStyle(fontSize: Sizer.getW(context)/32),),)),
+                                      ],
+                                      ))
                                   ],
                                  ),)
 
-            
+
               ]
             ),
           ),
@@ -271,8 +318,8 @@ children: [
                                               children: [
                                                 Expanded(
                                                   child: InkWell(
-                                                    onTap: () {
-                                                      value.pickFromCamera();
+                                                    onTap: () async {
+                                                      await value.pickFromCamera();
                                                       Navigator.pop(context);
                                                     },
                                                     child: Container(
@@ -296,8 +343,8 @@ children: [
                                                 ),
                                                 Expanded(
                                                   child: InkWell(
-                                                    onTap: ()  {
-                                                      value.pickFromGallery();
+                                                    onTap: ()  async {
+                                                      await value.pickFromGallery();
                                                       Navigator.pop(context);
                                                     },
                                                     child: Container(

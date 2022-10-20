@@ -34,6 +34,8 @@ class AppConstants {
   static String collectionAdmin = "Admin";
   static String collectionCompany = "Company";
   static String collectionUser = "User";
+  static String collectionHeritage = "Heritage";
+  static String collectionHeritageTypes = "HeritageTypes";
 
 
 }

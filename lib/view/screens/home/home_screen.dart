@@ -1,15 +1,26 @@
+import 'package:atharna/controller/heritage_provider.dart';
 import 'package:atharna/controller/home_provider.dart';
+import 'package:atharna/model/models.dart';
 import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/color_manager.dart';
 import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/view/screens/details_discover/details_discover_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../../../model/const.dart';
+import '../../resources/consts_manager.dart';
+
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   List<String> word = [
     "All",
     "Madinah",
@@ -18,9 +29,27 @@ class HomeScreen extends StatelessWidget {
     "Jazan",
     "Alshrqe"
   ];
+var getListHeritages,getListHeritageTypes;
   HomeProvider homeProvider = HomeProvider();
+  HeritageProvider heritageProvider = HeritageProvider();
+
+  @override
+  void initState() {
+    getListHeritagesFuc();
+    super.initState();
+  }
+
+  getListHeritagesFuc(){
+    getListHeritages = FirebaseFirestore.instance
+        .collection(AppConstants.collectionHeritage)
+       /// .orderBy("date")
+        .snapshots();
+    return getListHeritages;
+  }
+
   @override
   Widget build(BuildContext context) {
+    heritageProvider = Provider.of<HeritageProvider>(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -33,14 +62,14 @@ class HomeScreen extends StatelessWidget {
             buildAppBarHome(context),
 
            const SizedBox(height: AppSize.s10,),
-           
+
            Text("Discover",style: TextStyle(
             color: ColorManager.black,
             fontSize: Sizer.getW(context) / 16,
             fontWeight: FontWeight.bold
            ),),
            const SizedBox(height: AppSize.s10,),
-
+           ///TODO @hariri add Columm
            ChangeNotifierProvider<HomeProvider>.value(
             value: HomeProvider(),
             child: Consumer<HomeProvider>(
@@ -67,16 +96,16 @@ class HomeScreen extends StatelessWidget {
                           margin:  EdgeInsets.only(left:index==0?0:AppMargin.m4),
                           child: Text(word[index],
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: value.selectIndex==index 
+                          style: TextStyle(color: value.selectIndex==index
                           ?ColorManager.white:ColorManager.black),),
                         ),
                       )
                  ),
                         ),)),
             ),
-           
             const SizedBox(height: AppSize.s10,),
             buildDiscover(context),
+
            const SizedBox(height: AppSize.s10,),
            Text("Categories",style: TextStyle(
             color: ColorManager.black,
@@ -96,13 +125,14 @@ class HomeScreen extends StatelessWidget {
 
             buildLearnMore(context),
            const SizedBox(height: AppSize.s10,),
-           
-    
+
+
            ],
         ),
       ),
     );
   }
+
    Widget buildCategories(BuildContext context) {
     return SizedBox(
       height: Sizer.getW(context) * 0.3,

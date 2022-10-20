@@ -141,12 +141,92 @@ class FirebaseFun{
     return result;
   }
 
+
+  static createHeritage( {required model.Heritage heritage}) async {
+    final result= await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage).add(
+        heritage.toJson()
+    ).then((value){
+      heritage.id=value.id;
+      return {
+        'status':true,
+        'message':'Heritage successfully created',
+        'body': {
+          'id':value.id
+        }
+      };
+    }).catchError(onError);
+    return result;
+  }
+  static updateHeritage( {required model.Heritage heritage}) async {
+    final result =await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage)
+        .doc(heritage.id).update(
+        heritage.toJson()
+    ).then(onValueUpdateHeritage)
+        .catchError(onError);
+    return result;
+  }
+  static deleteHeritage( {required model.Heritage heritage}) async {
+    final result =await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage)
+        .doc(heritage.id).delete()
+        .then(onValueDeleteHeritage)
+        .catchError(onError);
+    return result;
+  }
+  static fetchHeritages()  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage)
+        .get()
+        .then((onValueFetchHeritages))
+        .catchError(onError);
+    return result;
+  }
+
+
+  static createHeritageType( {required String heritageType}) async {
+    final result= await FirebaseFirestore.instance.collection(AppConstants.collectionHeritageTypes).add(
+        {
+          "name":heritageType
+        }).then((value){
+      return {
+        'status':true,
+        'message':'HeritageTypes successfully created',
+        'body': {
+          'id':value.id
+        }
+      };
+    }).catchError(onError);
+    return result;
+  }
+  static deleteHeritageTypes( ) async {
+    FirebaseFirestore.instance.collection(AppConstants.collectionHeritageTypes).snapshots().forEach((querySnapshot) {
+      for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+        docSnapshot.reference.delete();
+      }
+    });
+  }
+  static fetchHeritageTypes()  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionHeritageTypes)
+        .get()
+        .then((onValueFetchHeritageTypes))
+        .catchError(onError);
+    return result;
+  }
+
+
    static Future<Map<String,dynamic>>  onError(error) async {
     print(false);
     print(error);
     return {
       'status':false,
       'message':error,
+      //'body':""
+    };
+  }
+  static Future<Map<String,dynamic>>  errorUser(String messageError) async {
+    print(false);
+    print(messageError);
+    return {
+      'status':false,
+      'message':messageError,
       //'body':""
     };
   }
@@ -219,7 +299,48 @@ class FirebaseFun{
       'body':value.docs
     };
   }
+  static Future<Map<String,dynamic>> onValueUpdateHeritage(value) async{
+    return {
+      'status':true,
+      'message':'Heritage successfully update',
+       // 'body': value.data.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueDeleteHeritage(value) async{
+    return {
+      'status':true,
+      'message':'Heritage successfully delete',
+       // 'body': value.data.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchHeritages(value) async{
+   // print(true);
+    print("Heritages count : ${value.docs.length}");
 
+    return {
+      'status':true,
+      'message':'Heritages successfully fetch',
+      'body':value.docs
+    };
+  }
+
+  static Future<Map<String,dynamic>> onValueDeleteHeritageTypes(value) async{
+    return {
+      'status':true,
+      'message':'HeritageType successfully delete',
+      // 'body': value.data.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchHeritageTypes(value) async{
+    // print(true);
+    print("HeritageTypes count : ${value.docs.length}");
+
+    return {
+      'status':true,
+      'message':'HeritageTypes successfully fetch',
+      'body':value.docs
+    };
+  }
 
   static String findTextToast(String text){
     return text;
@@ -265,6 +386,7 @@ class FirebaseFun{
             month*30+
             day);
   }
+
   static Future uploadImage({required XFile image, required String folder}) async {
     try {
       String path = basename(image.path);

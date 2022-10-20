@@ -88,21 +88,24 @@ class Users {
   }
 }
 
-//user
+//Heritage
 class Heritage {
   String id;
+  int index;
   String userId;
   String firstName;
   String lastName;
   String photoUrl;
   String heritageType;
-  double latitude;
-  double longitude;
+  double? latitude;
+  double? longitude;
   String description;
+  DateTime date;
  List<String> listFavoriteUserID;
   Map<String,dynamic> listUserComment;
   Heritage(
       {required this.id,
+       this.index=0,
       required this.userId,
         required this.firstName,
         required this.lastName,
@@ -112,6 +115,7 @@ class Heritage {
         required this.longitude,
          this.listFavoriteUserID=const[],
          this.listUserComment=const{},
+        required this.date,
         this.description="",});
   factory Heritage.fromJson( json){
     var data=json.data();
@@ -127,6 +131,7 @@ class Heritage {
         heritageType: data["heritageType"],
         latitude: data["latitude"],
         longitude: data["longitude"],
+        date: data["date"].toDate(),
         listUserComment: data["listUserComment"],
         listFavoriteUserID: tempListFavoriteUserID,
         description: (data["description"]!=null)?data["description"]:"");
@@ -139,11 +144,65 @@ class Heritage {
     'photoUrl':photoUrl,
     'heritageType':heritageType,
     'latitude':latitude,
+    'longitude':longitude,
     'photoUrl':photoUrl,
     'listUserComment':listUserComment,
     'listFavoriteUserID':listFavoriteUserID,
     'description':description,
+    'date':date,
   };
+}
+//Heritages
+class Heritages {
+  List<Heritage> heritages;
+
+  Heritages({
+    required this.heritages
+  });
+  factory Heritages.fromJson( json){
+    List<Heritage> tempHeritages = [];
+    for(int i=0;i<json.length;i++){
+      Heritage tempHeritage=Heritage.fromJson(json[i]);
+      tempHeritage.id=json[i].id;
+      tempHeritage.index=i;
+      tempHeritages.add(tempHeritage);
+    }
+    return Heritages(
+        heritages: tempHeritages
+    );
+  }
+  Map<String,dynamic> toJson(){
+    List<Map<String,dynamic>> tempHeritages = [];
+    for(Heritage heritage in heritages){
+      tempHeritages.add(heritage.toJson());
+    }
+    return {
+      'heritages':tempHeritages,
+    };
+  }
+}
+
+//Heritages
+class HeritageTypes {
+  List<String> heritageTypes;
+
+  HeritageTypes({
+    required this.heritageTypes
+  });
+  factory HeritageTypes.fromJson(json){
+    List<String> tempHeritageTypes = [];
+    for(int i=0;i<json.length;i++){
+      tempHeritageTypes.add(json[i]['name']);
+    }
+    return HeritageTypes(
+        heritageTypes: tempHeritageTypes
+    );
+  }
+  Map<String,dynamic> toJson(){
+    return {
+      'heritageTypes':heritageTypes,
+    };
+  }
 }
 
 
