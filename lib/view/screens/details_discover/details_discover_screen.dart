@@ -33,34 +33,39 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
               
               Container(
                 height: Sizer.getH(context) / 1.8,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                  fit:BoxFit.fill,
-                  
-                    image: AssetImage("assets/1.png"))
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(AppPadding.p12),
-                  color: ColorManager.black.withOpacity(.5),
-                  child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Flexible(
-                            child: Text(
-                  (heritageProvider.heritage.firstName!=null)?'${heritageProvider.heritage.firstName} ${heritageProvider.heritage.lastName}'
-                  :'${heritageProvider.heritage.title}'
-                                ''/*"ElphantMounten"*/,style:getBoldStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 14)),
-                          ),
-                             const SizedBox(height: AppSize.s4,),
-                          Row(
+               
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      "assets/2.png",
+                    fit: BoxFit.fill,
+                      width: double.infinity,
+                      height: Sizer.getH(context) / 1.8,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(AppPadding.p12),
+                      color: ColorManager.black.withOpacity(.5),
+                      child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Icon(Icons.location_pin,color: ColorManager.white,size: Sizer.getW(context)*0.075 ,),
-                              Flexible(child: Text("Al-Ula",style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 24),))
-                            ],
-                          )
-                    ,SizedBox(height: Sizer.getW(context) * 0.2,)
-                        ]),
+                              Flexible(
+                                child: Text(
+                      (heritageProvider.heritage.firstName!=null)?'${heritageProvider.heritage.firstName} ${heritageProvider.heritage.lastName}'
+                      :'${heritageProvider.heritage.title}'
+                                    ''/*"ElphantMounten"*/,style:getBoldStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 14)),
+                              ),
+                                 const SizedBox(height: AppSize.s4,),
+                              Row(
+                                children: [
+                                  Icon(Icons.location_pin,color: ColorManager.white,size: Sizer.getW(context)*0.075 ,),
+                                  Flexible(child: Text("Al-Ula",style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 24),))
+                                ],
+                              )
+                        ,SizedBox(height: Sizer.getW(context) * 0.2,)
+                            ]),
+                    ),
+                  ],
                 ),
                
               ),

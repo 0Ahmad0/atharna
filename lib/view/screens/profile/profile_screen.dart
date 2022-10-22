@@ -280,7 +280,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           return ButtonApp(
                               text: "Edit",
                               onTap: () async {
-
                                   Const.LOADIG(context);
                                   if(image!=null)
                                 await profileProvider.uploadImage(context, image!);
