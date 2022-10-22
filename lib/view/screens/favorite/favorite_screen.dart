@@ -14,6 +14,7 @@ import '../../../controller/heritage_provider.dart';
 import '../../../controller/profile_provider.dart';
 import '../../../model/const.dart';
 import '../../../model/models.dart';
+import '../../../widgets/picture/cach_picture_widget.dart';
 import '../../resources/consts_manager.dart';
 
 class FavoriteScreen extends StatefulWidget {
@@ -93,7 +94,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           Container(
             margin: const EdgeInsets.only(bottom: AppMargin.m12),
             height: Sizer.getW(context) * 0.5,
-            padding: const EdgeInsets.all(AppPadding.p14),
+           // padding: const EdgeInsets.all(AppPadding.p14),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppSize.s14),
                 boxShadow: [
@@ -105,6 +106,21 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     image: AssetImage("assets/1.png")
                 )
             ),
+            child: CacheNetworkImage(photoUrl: heritageProvider.listHeritagesFavorite.heritages[index].photoUrl,
+                width: Sizer.getH(context) / 1.8,
+                height: Sizer.getH(context) / 1.8,
+                waitWidget:  Image.asset(
+                  "assets/1.png",
+                  fit: BoxFit.fill,
+                  width: double.infinity,
+                  height: Sizer.getH(context) / 1.8,
+                ),
+                errorWidget: Image.asset(
+                  "assets/1.png",
+                  fit: BoxFit.fill,
+                  width: double.infinity,
+                  height: Sizer.getH(context) / 1.8,
+                )),
 
           ),
           Positioned(
@@ -117,21 +133,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 size: Sizer.getW(context) * 0.08,
                 color: ColorManager.error,
               ),
-              /*StatefulBuilder(builder: ((context, setState2){
-                bool isFav=heritageProvider.checkUserFavorite(profileProvider.user.id);
-                return
-                  IconButton(onPressed: () async {
-                  isFav=!isFav;
-                  await heritageProvider.changeUserFavorite(context,isFav, profileProvider.user.id);
-                  setState2((){});
-
-                }, icon: Icon(isFav?Icons.favorite:Icons.favorite_outline,
-                  size: isFav?Sizer.getW(context) * 0.08
-                      :Sizer.getW(context) * 0.08,
-                  color: isFav ? ColorManager.error: ColorManager.lightGray,
-                )
-                );
-              }) ),*/
             ),
           ),
 

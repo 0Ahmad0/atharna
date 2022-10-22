@@ -30,12 +30,12 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   getListHeritagesSearchFuc() async {
-     getListHeritagesCategory=await FirebaseFun.fetchHeritagesCategory() ;
-    getListHeritages = FirebaseFirestore.instance
+     getListHeritagesCategory= FirebaseFun.fetchHeritagesCategory() ;
+     getListHeritageSearch = FirebaseFirestore.instance
         .collection(AppConstants.collectionHeritage)
     /// .orderBy("date")
         .snapshots();
-    getListHeritageSearch=getListHeritages;
+   /// getListHeritageSearch=getListHeritages;
     //getListHeritageSearch.addAll(getListHeritagesCategory);
     return getListHeritageSearch;
   }
