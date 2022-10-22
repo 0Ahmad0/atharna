@@ -205,7 +205,19 @@ class HeritageTypes {
   }
 }
 
+class OnBoarding {
+  String image;
+  String text;
 
+  OnBoarding({required this.image,required this.text});
+
+}
+
+class Categories{
+  String name;
+  String image;
+  Categories({required this.image,required this.name});
+}
 
 /*
 

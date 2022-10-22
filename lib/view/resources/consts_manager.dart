@@ -1,3 +1,5 @@
+import 'package:atharna/view/resources/assets_manager.dart';
+
 import '../../model/models.dart';
 
 class AppConstants {
@@ -36,6 +38,21 @@ class AppConstants {
   static String collectionUser = "User";
   static String collectionHeritage = "Heritage";
   static String collectionHeritageTypes = "HeritageTypes";
+
+  static final List<Categories> categoriesList = [
+    Categories(
+      name: 'URBAN HERITAGE',
+      image: ImagesAssets.categoriesIMG1
+    ),
+    Categories(
+        name: 'HANDICRAFTS',
+        image: ImagesAssets.categoriesIMG2
+    ),
+    Categories(
+        name: 'ACTIVITIES',
+        image: ImagesAssets.categoriesIMG3
+    ),
+  ];
 
 
 }

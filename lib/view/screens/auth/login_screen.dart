@@ -4,6 +4,9 @@ import 'package:animate_do/animate_do.dart';
 import 'package:atharna/controller/heritage_provider.dart';
 import 'package:atharna/controller/utils/create_environment_provider.dart';
 import 'package:atharna/controller/utils/firebase.dart';
+import 'package:atharna/model/sizer.dart';
+import 'package:atharna/view/resources/color_manager.dart';
+import 'package:atharna/view/resources/style_manager.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +48,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   FadeInDown(
                     child: Text(
                       'Login',
+                      style: getBoldStyle(
+                        color: ColorManager.black,
+                        fontSize: Sizer.getW(context) / 12
+                      ),
                     ),
                   ),
                   FadeInDown(
@@ -55,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Text(
                         'Welcome Again ..',
+                        style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) / 26),
                       ),
                     ),
                   ),
@@ -65,7 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     delay: Duration(milliseconds: 150),
                     child: Text(
                       'Email Address',
-
                     ),
                   ),
                   SizedBox(

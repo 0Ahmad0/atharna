@@ -1,3 +1,6 @@
+import 'package:atharna/model/sizer.dart';
+import 'package:atharna/view/resources/color_manager.dart';
+import 'package:atharna/view/resources/style_manager.dart';
 import 'package:flutter/material.dart';
 class CustomTextFiled extends StatefulWidget {
   final TextEditingController controller;
@@ -41,7 +44,7 @@ class _CustomTextFiledState extends State<CustomTextFiled> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
+      style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/26),
       onTap:        widget.onTap,
       readOnly: widget.readOnly,
       controller: widget.controller,

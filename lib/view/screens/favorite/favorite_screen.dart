@@ -1,6 +1,7 @@
 import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/color_manager.dart';
 import 'package:atharna/view/resources/font_manager.dart';
+import 'package:atharna/view/resources/style_manager.dart';
 import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/view/screens/details_discover/details_discover_screen.dart';
 import 'package:flutter/material.dart';
@@ -62,12 +63,9 @@ class FavoriteScreen extends StatelessWidget {
               children: [
                 Container(
                   width: Sizer.getW(context) / 2,
-                  child: Text("Ryadh",style: TextStyle(
-                    color: ColorManager.white,
-                    fontSize: Sizer.getW(context) / 16,
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
-                  ),),
+                  child: Text("Ryadh",style: getBoldStyle(color: ColorManager.white,fontSize: Sizer.getW(context)/16).copyWith(
+                    overflow: TextOverflow.ellipsis
+                  )),
                 ),
                 const SizedBox(height: AppSize.s10,),
                   Row(
@@ -76,12 +74,9 @@ class FavoriteScreen extends StatelessWidget {
                 const SizedBox(width: AppSize.s4,),
                       Container(
                       width: Sizer.getW(context) / 2,
-                      child: Text("Al_Oula",style: TextStyle(
-                        color: ColorManager.white,
-                        fontSize: Sizer.getW(context) / 18,
-                        fontWeight: FontWeight.w200,
-                        overflow: TextOverflow.ellipsis,
-                      ),),
+                      child: Text("Al_Oula",style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context)/20).copyWith(
+                          overflow: TextOverflow.ellipsis
+                      )),
                 ),
                     ],
                   ),

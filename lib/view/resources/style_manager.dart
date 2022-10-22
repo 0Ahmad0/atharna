@@ -6,7 +6,7 @@ import '../../model/models.dart';
 import 'font_manager.dart';
 
 TextStyle _getTetxStyle({double? fontSize, FontWeight? fontWeight , Color? color}){
-return TextStyle(fontFamily: Advance.language?FontConstance.fontFamilyEN:FontConstance.fontFamilyAR , fontSize: fontSize,fontWeight: fontWeight , color: color);
+return TextStyle(fontFamily: FontConstance.fontFamilyEN , fontSize: fontSize,fontWeight: fontWeight , color: color);
 }
 
 ///Regular Style 

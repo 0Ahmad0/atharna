@@ -160,7 +160,8 @@ class _NavBarScreenState extends State<NavBarScreen> {
     topRight: Radius.circular(30.0),
     ),                                                                         
     child: Consumer<NavBarProvider>(
-      builder: (context, selectIndex, child) => BottomNavigationBar(    
+      builder: (context, selectIndex, child) => BottomNavigationBar(   
+      selectedLabelStyle: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context) / 28),
       currentIndex: selectIndex.currentIndex,
       onTap: (index)=>selectIndex.changeIndex(index),    
       selectedItemColor: Theme.of(context).primaryColor,

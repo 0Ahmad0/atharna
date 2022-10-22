@@ -5,6 +5,14 @@ import 'style_manager.dart';
 import 'values_manager.dart';
 class MyTheme {
   static var lightTheme = ThemeData(
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: ColorManager.primary
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle().copyWith(
+        foregroundColor:  MaterialStateProperty.all<Color>(ColorManager.primary)
+      )
+    ),
     primaryColor: Color(0xffAB6F5A),
     appBarTheme: AppBarTheme(
       backgroundColor: Color(0xffAB6F5A),

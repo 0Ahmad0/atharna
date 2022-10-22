@@ -4,8 +4,10 @@ import 'package:atharna/view/widgets/custome_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
 
 import '../../resources/color_manager.dart';
+import '../../resources/style_manager.dart';
 import '../../resources/values_manager.dart';
 
 class DetailsDiscoverScreen extends StatelessWidget {
@@ -36,20 +38,16 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Flexible(
-                            child: Text("ElphantMounten",style: TextStyle(
-                              color: ColorManager.white,
-                              fontSize: Sizer.getW(context) / 18,
-                              fontWeight: FontWeight.bold
-                            ),),
+                            child: Text("ElphantMounten",style:getBoldStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 14)),
                           ),
                              const SizedBox(height: AppSize.s4,),
                           Row(
                             children: [
                               Icon(Icons.location_pin,color: ColorManager.white,size: Sizer.getW(context)*0.075 ,),
-                              Flexible(child: Text("Al-Ula",style: TextStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 24),))
+                              Flexible(child: Text("Al-Ula",style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 24),))
                             ],
                           )
-                    ,SizedBox(height: Sizer.getW(context) * 0.1,)
+                    ,SizedBox(height: Sizer.getW(context) * 0.2,)
                         ]),
                 ),
                
@@ -63,23 +61,41 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 top: AppPadding.p24,
                 bottom: AppPadding.p14
               ),
-          height: Sizer.getH(context) / 2,
+          height: Sizer.getH(context) / 1.9,
           decoration: BoxDecoration(color: ColorManager.white,borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.s50),),
           ),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                  Text("Description",style: TextStyle(
-              color: ColorManager.black,
-              fontSize: Sizer.getW(context) / 16,
-              fontWeight: FontWeight.bold
-             ),),
-             const SizedBox(height: AppSize.s20,),
-             Text(cap,style: TextStyle(color: ColorManager.lightGray,
-             fontSize: Sizer.getW(context) / 24,
-             height: 1.3
-             ),),
+                  Text("Description",style: getBoldStyle(color: ColorManager.black,fontSize: Sizer.getW(context) / 14)),
+             const SizedBox(height: AppSize.s10,),
+             Text(cap,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) / 26)),
+             //TODO Show This Line if ACTIVITIES
+             if(true)
+               Column(
+                 children: [
+                   const SizedBox(height: AppSize.s20,),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Row(
+                         children: [
+                           Icon(Icons.timer_outlined,color: ColorManager.lightGray,size: Sizer.getW(context)*0.045,),
+                           Text("1PM - 10PM",style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
+                         ],
+                       ),
+                       const SizedBox(width: AppSize.s8,),
+                       Row(
+                         children: [
+                           Text('${DateFormat.yMd().format(DateTime.now())}'
+                             ,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
+                         ],
+                       ),
+                     ],
+                   ),
+                 ],
+               ),
              const SizedBox(height: AppSize.s20,),
              Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,15 +109,8 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 lable: "RATING",
                 child:Row(
                   children: [
-                    Text("4.5",style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: Sizer.getW(context) * 0.08,
-                      fontWeight: FontWeight.bold
-                    ),),
-                    Text("/5",style: TextStyle(
-                      color: ColorManager.lightGray,
-                      fontSize: Sizer.getW(context) * 0.04,                    
-                    ),)
+                    Text("4.5",style:getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
+                    Text("/5",style:getBoldStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) *0.04))
                   ],
                 )                 
                 )
@@ -109,15 +118,8 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 lable: "REVIEWS",
                 child:Row(
                   children: [
-                    Text("320",style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: Sizer.getW(context) * 0.08,
-                      fontWeight: FontWeight.bold
-                    ),),
-                    Text(" comments",style: TextStyle(
-                      color: ColorManager.lightGray,
-                      fontSize: Sizer.getW(context) * 0.025,                    
-                    ),)
+                    Text("320",style: getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
+                    Text(" comments",style:getBoldStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) *0.02))
                   ],
                 )                 
                 )
@@ -135,7 +137,7 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
           ),
         ),
         Positioned(
-          top: Sizer.getH(context) / 2.2,
+          top: Sizer.getH(context) / 2.3,
           right: AppSize.s30,
           child: Container(
             width: Sizer.getW(context) * 0.2,
@@ -172,10 +174,10 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
               children: [
                 Text(lable!,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: ColorManager.lightGray,
-                  fontWeight: FontWeight.bold,fontSize: Sizer.getW(context) / 26),),
-                  child!
+                style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) / 26)),
+                  Container(
+                      height: Sizer.getW(context) * 0.15,
+                      child: child!)
               ],
             );
   }

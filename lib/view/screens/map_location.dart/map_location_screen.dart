@@ -1,5 +1,6 @@
 import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/color_manager.dart';
+import 'package:atharna/view/resources/style_manager.dart';
 import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/view/widgets/custome_textfiled.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,7 @@ class MapLocation extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor
           ),
-          child: Text("Add Comment",style: TextStyle(color: ColorManager.white,fontSize: Sizer.getW(context)/22),),
+          child: Text("Add Comment",style: getRegularStyle(color: ColorManager.white,fontSize: Sizer.getW(context)/22),),
         ),
       ),
       body: SafeArea(
@@ -124,8 +125,8 @@ class MapLocation extends StatelessWidget {
             scale: 1.2,
             child: CircleAvatar(),
           ),
-          title: Text("My Name ${index+1}"),
-          subtitle: Text("This is Comment ${index+1}"),
+          title: Text("My Name ${index+1}",style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/24),),
+          subtitle: Text("This is Comment ${index+1}",style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/30)),
         ),
         Divider(
           height: 0,

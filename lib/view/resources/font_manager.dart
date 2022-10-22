@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 ///Font Family Calss Name
 class FontConstance {
-  static  const  fontFamilyEN = "Montserrat";
-  static  const  fontFamilyAR = "Changa";
+  static  const  fontFamilyEN = "Nunito";
 }
 
 //**** Font Weghit Every Font ****//

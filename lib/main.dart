@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           initialRoute: '/launch_screen',
           routes: {
             '/launch_screen': (context) => const LaunchScreen(),
-            '/on_boarding_screen': (context) => const  OnBoardingScreen(),
+            '/on_boarding_screen': (context) =>   OnBoardingScreen(),
             '/login_screen': (context) => const  LoginScreen(),
             '/register_screen': (context) => const RegisterScreen(),
             '/nav_bar_screen': (context) => const NavBarScreen(),

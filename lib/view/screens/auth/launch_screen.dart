@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:atharna/controller/auth_provider.dart';
 import 'package:atharna/view/screens/auth/login_screen.dart';
+import 'package:atharna/view/screens/auth/onboarding_screen.dart';
 import 'package:atharna/view/screens/home/home_screen.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:flutter/material.dart';
@@ -40,13 +41,13 @@ class _LaunchScreenState extends State<LaunchScreen> {
       }else{
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-                builder: (ctx) => LoginScreen()));
+                builder: (ctx) => OnBoardingScreen()));
       }
 
     }else{
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()
+          MaterialPageRoute(builder: (context) => OnBoardingScreen()
             //HomeView()
             // LoginView()
           ));

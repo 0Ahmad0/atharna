@@ -2,6 +2,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:atharna/controller/auth_provider.dart';
 import 'package:atharna/controller/utils/firebase.dart';
 import 'package:atharna/model/models.dart';
+import 'package:atharna/model/sizer.dart';
+import 'package:atharna/view/resources/color_manager.dart';
+import 'package:atharna/view/resources/style_manager.dart';
+import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/widgets/button_widget.dart';
 import 'package:atharna/widgets/constants.dart';
 import 'package:atharna/widgets/textfeild_widget.dart';
@@ -50,11 +54,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // SizedBox(height: 25,),
                   FadeInDown(
                     child: Text(
                       'Creat Account',
-                    
+                      style: getBoldStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/12),
                     ),
                   ),
                   FadeInDown(
@@ -65,6 +68,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       child: Text(
                         'SignUp to get started..',
+                        style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) / 26),
+                        
                       ),
                     ),
                   ),
@@ -195,7 +200,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                             ),
                             ignoreBlank: false,
-                            autoValidateMode: AutovalidateMode.disabled,
                             selectorTextStyle: TextStyle(color: color1),
                             textFieldController: phoneController,
                             formatInput: false,
@@ -203,6 +207,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
                             cursorColor: Colors.black,
                             inputDecoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              focusedErrorBorder: InputBorder.none,
                               contentPadding: EdgeInsets.only(bottom: 15, left: 0),
                               border: InputBorder.none,
                               hintText: 'Phone Number',
@@ -216,9 +225,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           Positioned(
-                            left: 90,
-                            top: 8,
-                            bottom: 9,
+                            left: Sizer.getW(context) / 4.5,
+                            top: AppSize.s8,
+                            bottom: AppSize.s8,
                             child: Container(
                               height: 30,
                               width: 1,
@@ -367,18 +376,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'Already have an account?',
                           style: TextStyle(color: color1),
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        InkWell(
-                          onTap: () {
+                        TextButton(onPressed: (){
                             Navigator.of(context).pushReplacementNamed('/login_screen');
-                          },
-                          child: Text(
-                            'Login',
-                            style: TextStyle(color: blak),
-                          ),
-                        )
+                        }, child: Text('Login'))
+                       
                       ],
                     ),
                   )
