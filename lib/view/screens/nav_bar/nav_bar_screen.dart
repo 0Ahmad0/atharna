@@ -12,7 +12,6 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
-//import '../../../controller/dprofile_provider.dart';
 import '../../../controller/profile_provider.dart';
 import '../../../model/const.dart';
 import '../../../model/sizer.dart';

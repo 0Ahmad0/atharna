@@ -3,10 +3,12 @@ import 'package:atharna/view/resources/consts_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../model/const.dart';
 import '../model/models.dart';
 import '../view/resources/values_manager.dart';
+import 'nav_bar_provider.dart';
 
 class AddRuinProvider extends ChangeNotifier{
    ImagePicker picker = ImagePicker();
@@ -17,15 +19,22 @@ class AddRuinProvider extends ChangeNotifier{
     "longitude":""
   };
    double  rateComplete=0;
+   int  countCheckComplete=0;
    Map<String,dynamic>  mapComplete={};
    final firstName = TextEditingController();
    final lastName = TextEditingController();
+   final description = TextEditingController();
    final heritageType = TextEditingController(text: '');
+   List listHeritageTypes=["Historical Site","Crafts","Object"];
 
-   Heritage heritage=Heritage(id: "", userId: "", firstName: "firstName", lastName: "lastName", photoUrl: "", heritageType: "heritageType", latitude: 0, longitude: 0, date: DateTime.now());
+       Heritage heritage=Heritage(id: "", userId: "", firstName: "firstName", lastName: "lastName", photoUrl: "", heritageType: "heritageType", latitude: 0, longitude: 0, date: DateTime.now());
 
-   
-   createHeritage(context,{required String userId}) async{
+   createReportHeritage(context,{required String userId}) async{
+     var result;
+      result=await createHeritage(context, userId: userId,statusHeritage: StatusHeritage.spoon);
+     return result;
+   }
+   createHeritage(context,{required String userId,required StatusHeritage statusHeritage,String description=""}) async{
      var result;
      String url=await FirebaseFun.uploadImage(image: image!, folder: AppConstants.collectionHeritage);
      if(url==null){
@@ -38,9 +47,18 @@ class AddRuinProvider extends ChangeNotifier{
            heritageType: heritageType.text,
            latitude: locationHeritage['latitude'],
            longitude: locationHeritage['longitude'],
+           statusHeritage: statusHeritage.name,
+           description: description,
            date: DateTime.now());
        // return session.toJson();
-       result =await FirebaseFun.createHeritage(heritage: heritage);
+       if(statusHeritage == StatusHeritage.accept){
+         result =await FirebaseFun.createHeritage(heritage: heritage);
+       }else{
+         result =await FirebaseFun.createReportHeritage(heritage: heritage);
+       }
+       if(result['status']){
+         dispose();
+       }
      }
        print(result);
        Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
@@ -58,7 +76,7 @@ class AddRuinProvider extends ChangeNotifier{
      //  print(element);
       if(element) countComplete++;
      });
-     rateComplete=(countComplete/5);
+     rateComplete=(countComplete/countCheckComplete);
 
    }
 
@@ -97,7 +115,11 @@ class AddRuinProvider extends ChangeNotifier{
                         print("***********************************");
                                               });
   }
-
+  gotoPageAddRuin(context){
+    final navBarProvider=Provider.of<NavBarProvider>(context,listen: false);
+    navBarProvider.currentIndex=0;
+    navBarProvider.notifyListeners();
+  }
    @override
    void dispose() {
      // TODO: implement dispose
@@ -105,6 +127,7 @@ class AddRuinProvider extends ChangeNotifier{
      mapComplete.clear();
      firstName.clear() ;
      lastName.clear()  ;
+     description.clear()  ;
      heritageType.clear() ;
      locationHeritage ={
        "latitude": "",

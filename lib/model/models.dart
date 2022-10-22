@@ -92,35 +92,50 @@ class Users {
 class Heritage {
   String id;
   int index;
-  String userId;
-  String firstName;
-  String lastName;
+  String? userId;
+  String? firstName;
+  String? lastName;
   String photoUrl;
-  String heritageType;
+  String? heritageType;
+  String? phone;
+  String? statusHeritage;
   double? latitude;
   double? longitude;
   String description;
   DateTime date;
+  DateTime? toDate;
+  DateTime? fromDate;
  List<String> listFavoriteUserID;
   Map<String,dynamic> listUserComment;
+  String? title;
+  String? location;
+  String? category;
+
   Heritage(
       {required this.id,
        this.index=0,
-      required this.userId,
-        required this.firstName,
-        required this.lastName,
+       this.userId,
+       this.title,
+       this.location,
+       this.category,
+         this.firstName,
+         this.lastName,
         required this.photoUrl,
-        required this.heritageType,
-        required this.latitude,
-        required this.longitude,
+         this.heritageType,
+         this.latitude,
+         this.longitude,
          this.listFavoriteUserID=const[],
          this.listUserComment=const{},
         required this.date,
-        this.description="",});
+         this.fromDate,
+         this.phone,
+         this.toDate,
+        this.description="",
+        this.statusHeritage,});
   factory Heritage.fromJson( json){
     var data=json.data();
     List<String> tempListFavoriteUserID = [];
-    for(String user in data["listFavoriteUserID"]){
+    for(String user in json["listFavoriteUserID"]){
       tempListFavoriteUserID.add(user);
     }
     return Heritage(id: data['id'],
@@ -128,13 +143,50 @@ class Heritage {
         firstName: data["firstName"],
         lastName: data["lastName"],
         photoUrl: data["photoUrl"],
+      phone: data["phone"],
         heritageType: data["heritageType"],
         latitude: data["latitude"],
         longitude: data["longitude"],
         date: data["date"].toDate(),
         listUserComment: data["listUserComment"],
+        statusHeritage: data["statusHeritage"],
         listFavoriteUserID: tempListFavoriteUserID,
-        description: (data["description"]!=null)?data["description"]:"");
+        description: (data["description"]!=null)?data["description"]:"",
+        title: (data["title"]!=null)?data["title"]:"",
+    category: (data["category"]!=null)?data["category"]:"",
+      location: (data["location"]!=null)?data["location"]:"",
+      toDate: (data["toDate"]!=null)?data["toDate"].toDate():null,
+      fromDate: (data["fromDate"]!=null)?data["fromDate"].toDate():null,
+
+    );
+  }
+  factory Heritage.fromMap( json){
+    //var data=json.data();
+    List<String> tempListFavoriteUserID = [];
+    for(String user in json["listFavoriteUserID"]){
+      tempListFavoriteUserID.add(user);
+    }
+    return Heritage(id: json['id'],
+      userId: json["userId"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      photoUrl: json["photoUrl"],
+      phone: json["phone"],
+      heritageType: json["heritageType"],
+      latitude: json["latitude"],
+      longitude: json["longitude"],
+      date: json["date"],
+      listUserComment: json["listUserComment"],
+      statusHeritage: json["statusHeritage"],
+      listFavoriteUserID: tempListFavoriteUserID,
+      description: (json["description"]!=null)?json["description"]:"",
+      title: (json["title"]!=null)?json["title"]:"",
+      category: (json["category"]!=null)?json["category"]:"",
+      location: (json["location"]!=null)?json["location"]:"",
+      toDate: json["toDate"],
+      fromDate: json["fromDate"],
+
+    );
   }
   Map<String,dynamic> toJson()=>{
     'id':id,
@@ -142,6 +194,7 @@ class Heritage {
     'firstName':firstName,
     'lastName':lastName,
     'photoUrl':photoUrl,
+    'phone':phone,
     'heritageType':heritageType,
     'latitude':latitude,
     'longitude':longitude,
@@ -149,7 +202,13 @@ class Heritage {
     'listUserComment':listUserComment,
     'listFavoriteUserID':listFavoriteUserID,
     'description':description,
+    'statusHeritage':statusHeritage,
     'date':date,
+    'title':title,
+    'location':location,
+    'category':category,
+    'toDate':toDate,
+    'fromDate':fromDate,
   };
 }
 //Heritages
@@ -205,6 +264,7 @@ class HeritageTypes {
   }
 }
 
+
 class OnBoarding {
   String image;
   String text;
@@ -219,6 +279,12 @@ class Categories{
   Categories({required this.image,required this.name});
 }
 
+///StatusHeritage
+enum StatusHeritage{
+  spoon,///معلقة
+  accept,///مقبولة
+  rejected,///مرفوضة
+}
 /*
 
 flutter pub run easy_localization:generate -S "assets/translations/" -O "lib/translations"

@@ -1,8 +1,9 @@
 import 'package:atharna/controller/add_ruin_provider.dart';
-import 'package:atharna/controller/create_heritage_provider.dart';
 import 'package:atharna/model/const.dart';
+import 'package:atharna/model/models.dart';
 import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/color_manager.dart';
+import 'package:atharna/view/resources/consts_manager.dart';
 import 'package:atharna/view/resources/style_manager.dart';
 import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/view/widgets/custome_textfiled.dart';
@@ -17,6 +18,7 @@ import 'dart:io';
 
 import 'package:provider/provider.dart';
 
+import '../../../controller/nav_bar_provider.dart';
 import '../../../controller/profile_provider.dart';
 import '../../../controller/utils/firebase.dart';
 
@@ -26,32 +28,74 @@ class AddRuinScreen extends StatelessWidget {
   final heritageType = TextEditingController(text: '');
   final formKey = GlobalKey<FormState>();
   late ProfileProvider profileProvider;
-  checkPrograse(BuildContext context,AddRuinProvider value) async {
-  if (value.mapComplete.values.length >= 5) {
+  late AddRuinProvider addRuinProvider;
+
+  checkPrograse(BuildContext context) async {
+    var result;
   Const.LOADIG(context);
-  await value.createHeritage(context,
-  userId: profileProvider.user.id);
-  Navigator.pop(context);
-  } else {
-  Const.TOAST(context,
-  textToast: FirebaseFun.findTextToast(
-  "There are empty fields after"));
+  if(profileProvider.user.typeUser.contains(AppConstants.collectionAdmin)){
+    result=await checkPrograseAdmin(context);
+  }else{
+    result=await checkPrograseUser(context);
   }
+  Navigator.pop(context);
+    if(result["status"]){
+      addRuinProvider.gotoPageAddRuin(context);
+    }
+  }
+  checkPrograseUser(BuildContext context) async {
+    var result;
+    if (addRuinProvider.mapComplete.values.length >= addRuinProvider.countCheckComplete) {
+        result=await addRuinProvider.createReportHeritage(context,userId: profileProvider.user.id);
+    } else {
+      Const.TOAST(context,
+          textToast: FirebaseFun.findTextToast(
+              "There are empty fields after"));
+    }
+    return result;
+  }
+  checkPrograseAdmin(BuildContext context) async {
+    var result;
+    if (addRuinProvider.mapComplete.values.length >= addRuinProvider.countCheckComplete) {
+        result=await addRuinProvider.createHeritage(context,userId: profileProvider.user.id,
+            statusHeritage: StatusHeritage.accept,
+            description: addRuinProvider.description.text);
+
+    } else {
+      Const.TOAST(context,
+          textToast: FirebaseFun.findTextToast(
+              "There are empty fields after"));
+    }
+    return result;
   }
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
-    return Scaffold(
+
+    return
+      ChangeNotifierProvider(
+        create: (_) => AddRuinProvider(),
+    child: Consumer<AddRuinProvider>(
+    builder: ((context, value, child) {
+    addRuinProvider= Provider.of<AddRuinProvider>(context);
+    if(profileProvider.user.typeUser.contains(AppConstants.collectionAdmin)){
+    addRuinProvider.countCheckComplete=6;
+    }
+    else if(profileProvider.user.typeUser.contains(AppConstants.collectionUser)){
+    addRuinProvider.countCheckComplete=5;
+    }
+    return
+      Scaffold(
       floatingActionButton:  SizedBox(
         height: Sizer.getW(context)*0.2,
         child: CircleProgressBar(
           foregroundColor: Theme.of(context).primaryColor,
           backgroundColor: Colors.black12,
-          value: Provider.of<AddRuinProvider>(context).rateComplete * 100,
+          value: (value.rateComplete),
           child: FloatingActionButton(
             backgroundColor: ColorManager.white,
             onPressed: ()async{
-              checkPrograse(context,Provider.of<AddRuinProvider>(context));
+              checkPrograse(context);
             },
             child: Text(
               "+",
@@ -63,14 +107,13 @@ class AddRuinScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: AppPadding.p16, vertical: AppPadding.p10),
-        child: ChangeNotifierProvider(
-          create: (_) => AddRuinProvider(),
-          child: Consumer<AddRuinProvider>(
-              builder: ((context, value, child) =>
-                  buildFormInfoHeritage(context, value))),
-        ),
+        child: buildFormInfoHeritage(context, value)
+
       ),
     );
+    }
+      )
+    ));
   }
 
   Row buildDataHeritage() {
@@ -155,6 +198,30 @@ class AddRuinScreen extends StatelessWidget {
                 prefixIcon: Icons.person,
                 maxLength: null,
                 hintText: "Last name"),
+                (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
+              const SizedBox(
+                height: AppSize.s20,):SizedBox(),
+                (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
+            CustomTextFiled(
+                controller: value.description,
+                validator: (String? val) {
+                  if (val!.trim().isEmpty) {
+                    return "This filed reqiured";
+                  }
+
+                  return null;
+                },
+                onChange: (String? val) {
+                  if (val!.trim().isEmpty) {
+                    value.changeRateComplete("description", false);
+                  } else {
+                    value.changeRateComplete("description", true);
+                  }
+                },
+                prefixIcon: Icons.person,
+                maxLength: null,
+                hintText: "description")
+                    :SizedBox(),
             const SizedBox(
               height: AppSize.s20,
             ),
@@ -167,10 +234,10 @@ class AddRuinScreen extends StatelessWidget {
                     vertical: AppPadding.p10, horizontal: AppPadding.p10),
               ),
               items: [
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < value.listHeritageTypes.length; i++)
                   DropdownMenuItem(
                     value: i.toString(),
-                    child: Text("Item ${i + 1}",style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/28),),
+                    child: Text("${value.listHeritageTypes[i]}",style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/28),),
                   )
               ],
               onChanged: (val) {
@@ -217,24 +284,38 @@ class AddRuinScreen extends StatelessWidget {
                               strokeWidth: 2,
                               child: Container(
                                 height: Sizer.getW(context) / 2.2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+
+                                child:
+                                Stack(
+                                  fit: StackFit.expand,
                                   children: [
-                                    Icon(
-                                      Icons.cloud_upload,
-                                      size: Sizer.getW(context) * 0.1,
+                                    (value.image!=null)?ClipRRect(
+                                      borderRadius: BorderRadius.circular(AppSize.s14),
+                                      child: Image.file(File(value.image!.path),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ):SizedBox(),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.cloud_upload,
+                                          size: Sizer.getW(context) * 0.1,
+                                        ),
+                                        const SizedBox(
+                                          height: AppSize.s20,
+                                        ),
+                                        Text(
+                                            "Browser to uplade",
+                                            textAlign: TextAlign.center,
+                                            style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/28)
+                                        )
+                                      ],
                                     ),
-                                    const SizedBox(
-                                      height: AppSize.s20,
-                                    ),
-                                    Text(
-                                      "Browser to uplade",
-                                      textAlign: TextAlign.center,
-                                        style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/28)
-                                    )
                                   ],
-                                ),
+                                )
+
                               )))
                     ],
                   ),
@@ -329,15 +410,17 @@ class AddRuinScreen extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.all(AppPadding.p8),
-                          child: Row(
-                            children: [
-                              Icon(Icons.camera),
-                              const SizedBox(
-                                width: AppSize.s8,
+                          child:
+                              Row(
+                                children: [
+                                  Icon(Icons.camera),
+                                  const SizedBox(
+                                    width: AppSize.s8,
+                                  ),
+                                  Text("Camera"),
+                                ],
                               ),
-                              Text("Camera"),
-                            ],
-                          ),
+
                         ),
                       ),
                     ),

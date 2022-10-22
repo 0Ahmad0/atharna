@@ -15,7 +15,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'controller/create_heritage_provider.dart';
 import 'controller/profile_provider.dart';
 import 'view/resources/theme_manager.dart';
 import 'view/screens/auth/launch_screen.dart';
@@ -38,10 +37,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(providers: [
       ChangeNotifierProvider(create: (_)=>NavBarProvider()),
       Provider<HomeProvider>(create: (_)=>HomeProvider()),
-      Provider<AddRuinProvider>(create: (_)=>AddRuinProvider()),
+      ListenableProvider<AddRuinProvider>(create: (_)=>AddRuinProvider()),
       ListenableProvider<AuthProvider>(create: (_) => AuthProvider()),
       ListenableProvider<ProfileProvider>(create: (_)=>ProfileProvider()),
-      ListenableProvider<CreateHeritageProvider>(create: (_)=>CreateHeritageProvider()),
       ListenableProvider<HeritageProvider>(create: (_)=>HeritageProvider()),
 
     ],

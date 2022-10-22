@@ -1,20 +1,29 @@
+import 'package:atharna/controller/profile_provider.dart';
 import 'package:atharna/model/sizer.dart';
+import 'package:atharna/view/resources/consts_manager.dart';
 import 'package:atharna/view/screens/map_location.dart/map_location_screen.dart';
 import 'package:atharna/view/widgets/custome_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
+import '../../../controller/heritage_provider.dart';
 import '../../resources/color_manager.dart';
 import '../../resources/style_manager.dart';
 import '../../resources/values_manager.dart';
 
 class DetailsDiscoverScreen extends StatelessWidget {
+  late HeritageProvider heritageProvider;
+  late ProfileProvider profileProvider;
 bool isFav = false;
 String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder located 11km northeast of AlUla. A spectacular example of natural erosive forces of water and wind over a period of millions of years, this natural wonder rises 171ft into the air with mountains looming in the background.";
   @override
   Widget build(BuildContext context) {
+    heritageProvider = Provider.of<HeritageProvider>(context);
+    profileProvider = Provider.of<ProfileProvider>(context);
+    isFav=heritageProvider.checkUserFavorite(profileProvider.user.id);
     return Scaffold(
       body: Stack(
         alignment: Alignment.bottomCenter,
@@ -38,7 +47,10 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Flexible(
-                            child: Text("ElphantMounten",style:getBoldStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 14)),
+                            child: Text(
+                  (heritageProvider.heritage.firstName!=null)?'${heritageProvider.heritage.firstName} ${heritageProvider.heritage.lastName}'
+                  :'${heritageProvider.heritage.title}'
+                                ''/*"ElphantMounten"*/,style:getBoldStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 14)),
                           ),
                              const SizedBox(height: AppSize.s4,),
                           Row(
@@ -70,11 +82,19 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
               children: [
                   Text("Description",style: getBoldStyle(color: ColorManager.black,fontSize: Sizer.getW(context) / 14)),
              const SizedBox(height: AppSize.s10,),
-             Text(cap,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) / 26)),
+             Text('${heritageProvider.heritage.description}'/*cap*/,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) / 26)),
              //TODO Show This Line if ACTIVITIES
-             if(true)
+
+             if((heritageProvider.heritage.phone!=null))
                Column(
                  children: [
+                   const SizedBox(height: AppSize.s20,),
+                   Row(
+                     children: [
+                       Text('${heritageProvider.heritage.phone}'
+                         ,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
+                     ],
+                   ),
                    const SizedBox(height: AppSize.s20,),
                    Row(
                      mainAxisAlignment: MainAxisAlignment.center,
@@ -88,12 +108,15 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                        const SizedBox(width: AppSize.s8,),
                        Row(
                          children: [
-                           Text('${DateFormat.yMd().format(DateTime.now())}'
+                           Text('${DateFormat.yMd().format(heritageProvider.heritage.fromDate!)}'
                              ,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
                          ],
                        ),
+
                      ],
                    ),
+
+
                  ],
                ),
              const SizedBox(height: AppSize.s20,),
@@ -118,7 +141,7 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 lable: "REVIEWS",
                 child:Row(
                   children: [
-                    Text("320",style: getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
+                    Text('${heritageProvider.heritage.listUserComment.values.length}'/*"320"*/,style: getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
                     Text(" comments",style:getBoldStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) *0.02))
                   ],
                 )                 
@@ -129,8 +152,8 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
              const SizedBox(height: AppSize.s20,),
       
              ButtonApp(text: "Get Map",onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>MapLocation(
-              latitude: 33.3565978751,
-              longitude: 36.235787455,
+              latitude: heritageProvider.heritage.latitude!,//33.3565978751,
+              longitude: heritageProvider.heritage.longitude!,//36.235787455,
              ))), )
               ],
             ),
@@ -149,8 +172,13 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 BoxShadow(color: ColorManager.black.withOpacity(.2),blurRadius: 10)
               ]
             ),
-            child:StatefulBuilder(builder: ((context, setState2) => IconButton(onPressed: (){
+            child:StatefulBuilder(builder: ((context, setState2) => IconButton(onPressed: () async {
               isFav = !isFav;
+              String collection=AppConstants.collectionHeritage;
+              if(heritageProvider.heritage.phone!=null){
+                collection=AppConstants.collectionHeritageCategory;
+              }
+              await heritageProvider.changeUserFavorite(context,isFav, profileProvider.user.id,collection: collection);
               setState2((){});
 
             }, icon: Icon(isFav?Icons.favorite:Icons.favorite_outline,

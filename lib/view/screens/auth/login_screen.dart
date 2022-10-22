@@ -195,9 +195,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         text:_isLoading?
                             '${FirebaseFun.findTextToast("Loading ..")}':
                         'Login',
-                        onPress: () {
+                        onPress: () async {
+
                           !_isLoading?
-                          performLogin():"";
+                          (await performLogin(context)):"";
+
                         },
                       ),
                     ),
@@ -232,9 +234,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         text: 'done',
                         onPress: () async {
                           Const.LOADIG(context);
-                        /// await CreateEnvironmentProvider().createHeritageTypes(context);
+                         /// await CreateEnvironmentProvider().createAdmins(context);
+                          await CreateEnvironmentProvider().createCategory(context);
                           ///await HeritageProvider().fetchHeritages();
-                          await HeritageProvider().fetchHeritageTypes();
+                         /// await HeritageProvider().fetchHeritageTypes();
                           Navigator.pop(context);
                         },
                       ),
@@ -247,9 +250,9 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  Future<void> performLogin() async {
+  Future<void> performLogin(context) async {
     if (checkData()) {
-      await login();
+      await login(context);
     }
   }
 
@@ -265,13 +268,15 @@ class _LoginScreenState extends State<LoginScreen> {
     return false;
   }
 
-  Future<void> login() async {
+  Future<void> login(context) async {
     setState(() {
       _isLoading = true;
     });
     authProvider.email =emailController;
     authProvider.password = passwordController;
+    Const.LOADIG(context);
    final result =await authProvider.login(context);
+    Navigator.pop(context);
     setState(() {
       _isLoading = false;
     });

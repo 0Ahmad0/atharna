@@ -37,6 +37,8 @@ class AppConstants {
   static String collectionCompany = "Company";
   static String collectionUser = "User";
   static String collectionHeritage = "Heritage";
+  static String collectionHeritageCategory = "HeritageCategory";
+  static String collectionReportHeritage = "ReportHeritage";
   static String collectionHeritageTypes = "HeritageTypes";
 
   static final List<Categories> categoriesList = [

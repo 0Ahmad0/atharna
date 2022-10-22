@@ -3,24 +3,54 @@ import 'package:atharna/view/resources/color_manager.dart';
 import 'package:atharna/view/resources/style_manager.dart';
 import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/view/screens/details_discover/details_discover_screen.dart';
+import 'package:atharna/widgets/picture/cach_picture_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
+import '../../../controller/heritage_provider.dart';
+import '../../../model/const.dart';
+import '../../../model/models.dart';
 import '../../../model/sizer.dart';
+import '../../resources/consts_manager.dart';
 
-class ShowCategoriesScreen extends StatelessWidget {
+class ShowCategoriesScreen extends StatefulWidget {
   final String name;
 
   const ShowCategoriesScreen({super.key, required this.name});
 
   @override
+  State<ShowCategoriesScreen> createState() => _ShowCategoriesScreenState();
+}
+
+class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
+  var getListHeritagesCategory;
+  HeritageProvider heritageProvider = HeritageProvider();
+  @override
+  void initState() {
+    getListHeritagesCategoryFuc();
+    super.initState();
+  }
+
+  getListHeritagesCategoryFuc() {
+    print(widget.name);
+     getListHeritagesCategory = FirebaseFirestore.instance
+        .collection(AppConstants.collectionHeritageCategory)
+    .where('category',isEqualTo: widget.name)
+    /// .orderBy("date")
+        .snapshots();
+    return getListHeritagesCategory;
+  }
+  @override
   Widget build(BuildContext context) {
+    heritageProvider = Provider.of<HeritageProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title:  Text(
-          name,
+          widget.name,
           style: getBoldStyle(
               color: ColorManager.black,
               fontSize: Sizer.getW(context) / 18),
@@ -30,18 +60,44 @@ class ShowCategoriesScreen extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(
-              horizontal: AppPadding.p16, vertical: AppPadding.p10),
-          itemCount: 10,
-          itemBuilder: (context,index)=>buildShapeCategories(context,index),
-        ),
+        child: StreamBuilder<QuerySnapshot>(
+          //prints the messages to the screen0
+            stream: getListHeritagesCategory,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return
+                  /// Const.SHOWLOADINGINDECATOR();
+                  waitListCategory(context);
+              }
+              else if (snapshot.connectionState ==
+                  ConnectionState.active) {
+                if (snapshot.hasError) {
+                  return const Text('Error');
+                } else if (snapshot.hasData) {
+                  /// Const.SHOWLOADINGINDECATOR();
+                  waitListCategory(context);
+                  heritageProvider.listHeritagesCategory=Heritages.fromJson(snapshot.data!.docs);
+                  print("Heritage Category ${widget.name} : ${snapshot.data!.docs.length}");
+                  return buildListCategory(context);
+                  /// }));
+                } else {
+                  return const Text('Empty data');
+                }
+              }
+              else {
+                return Text('State: ${snapshot.connectionState}');
+              }
+            }),
       ),
     );
   }
+
   Widget buildShapeCategories(BuildContext context,int index){
     return InkWell(
-      onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>DetailsDiscoverScreen())),
+      onTap: (){
+        heritageProvider.heritage=heritageProvider.listHeritagesCategory.heritages[index];
+        Navigator.push(context, MaterialPageRoute(builder: (ctx)=>DetailsDiscoverScreen()));},
+
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: AppMargin.m8),
         decoration: BoxDecoration(
@@ -61,10 +117,19 @@ class ShowCategoriesScreen extends StatelessWidget {
                     color: ColorManager.primary,
                   borderRadius: BorderRadius.circular(AppSize.s8)
                 ),
-                child: Image.asset(ImagesAssets.categoriesIMG2)),
+                child:CacheNetworkImage(
+                  photoUrl: '${heritageProvider.listHeritagesCategory.heritages[index].photoUrl}'
+                  , width: Sizer.getW(context) / 3.5,
+                  height: Sizer.getW(context) / 3.5,
+                  waitWidget: Image.asset(ImagesAssets.onBoardingIMG2),
+                  errorWidget: Image.asset(ImagesAssets.onBoardingIMG2),
+
+                )
+                ///Image.asset(ImagesAssets.categoriesIMG2)
+            ),
             Expanded(
               child: ListTile(
-                title: buildContent(context),
+                title: buildContent(context,index),
                 subtitle: Row(
                   children: [
                     Expanded(child: Row(
@@ -75,7 +140,7 @@ class ShowCategoriesScreen extends StatelessWidget {
                     )),
                     Expanded(child: Row(
                       children: [
-                        Text('${DateFormat.yMd().format(DateTime.now())}'
+                        Text('${DateFormat.yMd().format(heritageProvider.listHeritagesCategory.heritages[index].fromDate!)}'
                           ,style: getRegularStyle(color: ColorManager.lightGray),)
                       ],
                     )),
@@ -89,11 +154,11 @@ class ShowCategoriesScreen extends StatelessWidget {
     );
   }
 
-  Column buildContent(BuildContext context) {
+  Column buildContent(BuildContext context,int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('Al-Ula Tour',style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/22),),
+        Text('${heritageProvider.listHeritagesCategory.heritages[index].title}'/*'Al-Ula Tour'*/,style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/22),),
         const SizedBox(height: AppSize.s4,),
         Row(
           children: [
@@ -105,5 +170,21 @@ class ShowCategoriesScreen extends StatelessWidget {
         const SizedBox(height: AppSize.s10,),
       ],
     );
+  }
+   buildListCategory(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppPadding.p16, vertical: AppPadding.p10),
+      itemCount: heritageProvider.listHeritagesCategory.heritages.length,
+      itemBuilder: (context,index)=>buildShapeCategories(context,index),
+    );
+  }
+  ///wait
+  Widget waitListCategory(BuildContext context){
+    if(heritageProvider.listHeritagesCategory.heritages.length<=0){
+      return Const.SHOWLOADINGINDECATOR();
+    }else {
+      return buildListCategory(context);
+    }
   }
 }

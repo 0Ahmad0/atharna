@@ -1,3 +1,4 @@
+import 'package:atharna/controller/profile_provider.dart';
 import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/color_manager.dart';
 import 'package:atharna/view/resources/style_manager.dart';
@@ -5,14 +6,22 @@ import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/view/widgets/custome_textfiled.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:provider/provider.dart';
+
+import '../../../controller/heritage_provider.dart';
+import '../../../model/const.dart';
 
 class MapLocation extends StatelessWidget {
   final double latitude ;
   final double longitude ;
   final comment = TextEditingController();
+  late HeritageProvider heritageProvider;
+  late ProfileProvider profileProvider;
    MapLocation({super.key, required this.latitude, required this.longitude});
   @override
   Widget build(BuildContext context) {
+    heritageProvider = Provider.of<HeritageProvider>(context);
+    profileProvider = Provider.of<ProfileProvider>(context);
     MapController controller = MapController(
       initMapWithUserPosition: false,
       initPosition: GeoPoint(
@@ -22,7 +31,7 @@ class MapLocation extends StatelessWidget {
     );
     return Scaffold(
       bottomSheet: GestureDetector(
-        onTap:(){
+        onTap:() async {
           showModalBottomSheet(
             backgroundColor: Colors.transparent,
             isScrollControlled: true,
@@ -57,6 +66,7 @@ class MapLocation extends StatelessWidget {
                const SizedBox(width:  AppSize.s10,),
                InkWell(
                 onTap: (){
+                  heritageProvider.addComment(context, profileProvider.user.id, comment.text);
                   comment.clear();
                 },
                 child: Container(
@@ -72,8 +82,12 @@ class MapLocation extends StatelessWidget {
          ,Expanded(
            child: ListView.builder(
             controller: scrollController,
-            itemCount: 10,
-            itemBuilder: ((context, index) => buildComment(context, index)),
+            itemCount: heritageProvider.heritage.listUserComment.keys.length,
+            itemBuilder: ((context, index)
+            {
+             return buildComment(context, index);
+            }
+            ),
            ),
          )
           ],
@@ -125,8 +139,35 @@ class MapLocation extends StatelessWidget {
             scale: 1.2,
             child: CircleAvatar(),
           ),
-          title: Text("My Name ${index+1}",style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/24),),
-          subtitle: Text("This is Comment ${index+1}",style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/30)),
+          title: FutureBuilder(
+            future: heritageProvider.fetchNameUser(context, idUser: heritageProvider.heritage.listUserComment.keys.elementAt(index)),
+            builder: (
+                context,
+                snapshot,
+                ) {
+              print(snapshot.error);
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Expanded(child: Const.SHOWLOADINGINDECATOR());
+                //Const.CIRCLE(context);
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return const Text('Error');
+                } else if (snapshot.hasData) {
+                  // Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
+                  //homeProvider.sessions=Sessions.fromJson(data['body']);
+                 /// return const Text('ok');
+                  return Text(
+                    '${snapshot.data}'
+                    /*"My Name ${index+1}"*/,style: getRegularStyle(color: ColorManager.black,fontSize: Sizer.getW(context)/24),);
+                } else {
+                  return const Text('Empty data');
+                }
+              } else {
+                return Text('State: ${snapshot.connectionState}');
+              }
+            },
+          ),
+          subtitle: Text('${heritageProvider.heritage.listUserComment[heritageProvider.heritage.listUserComment.keys.elementAt(index)]}'/*"This is Comment ${index+1}"*/,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/30)),
         ),
         Divider(
           height: 0,

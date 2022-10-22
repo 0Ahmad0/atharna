@@ -157,11 +157,65 @@ class FirebaseFun{
     }).catchError(onError);
     return result;
   }
+  static createHeritageCategory( {required model.Heritage heritage}) async {
+    final result= await FirebaseFirestore.instance.collection(AppConstants.collectionHeritageCategory).add(
+        heritage.toJson()
+    ).then((value){
+      heritage.id=value.id;
+      return {
+        'status':true,
+        'message':'HeritageCategory successfully created',
+        'body': {
+          'id':value.id
+        }
+      };
+    }).catchError(onError);
+    return result;
+  }
+  static createReportHeritage( {required model.Heritage heritage}) async {
+    final result= await FirebaseFirestore.instance.collection(AppConstants.collectionReportHeritage).add(
+        heritage.toJson()
+    ).then((value){
+      heritage.id=value.id;
+      return {
+        'status':true,
+        'message':'Report Heritage successfully created',
+        'body': {
+          'id':value.id
+        }
+      };
+    }).catchError(onError);
+    return result;
+  }
   static updateHeritage( {required model.Heritage heritage}) async {
     final result =await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage)
         .doc(heritage.id).update(
         heritage.toJson()
     ).then(onValueUpdateHeritage)
+        .catchError(onError);
+    return result;
+  }
+  static addCommentHeritage( {required model.Heritage heritage}) async {
+    final result =await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage)
+        .doc(heritage.id).update(
+        heritage.toJson()
+    ).then(onValueAddCommentHeritage)
+        .catchError(onError);
+    return result;
+  }
+  static addUserFavoriteHeritage( {required model.Heritage heritage,required String collection}) async {
+    final result =await FirebaseFirestore.instance.collection(collection)
+        .doc(heritage.id).update(
+        heritage.toJson()
+    ).then(onValueUserFavoriteHeritage)
+        .catchError(onError);
+    return result;
+  }
+  static deleteUserFavoriteHeritage( {required model.Heritage heritage,required String collection}) async {
+    final result =await FirebaseFirestore.instance.collection(collection)
+        .doc(heritage.id).update(
+        heritage.toJson()
+    ).then(onValueDeleteUserFavorite)
         .catchError(onError);
     return result;
   }
@@ -180,6 +234,13 @@ class FirebaseFun{
     return result;
   }
 
+  static fetchHeritagesCategory()  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionHeritageCategory)
+        .get()
+        .then((onValueFetchHeritagesCategory))
+        .catchError(onError);
+    return result;
+  }
 
   static createHeritageType( {required String heritageType}) async {
     final result= await FirebaseFirestore.instance.collection(AppConstants.collectionHeritageTypes).add(
@@ -306,6 +367,28 @@ class FirebaseFun{
        // 'body': value.data.toJson()
     };
   }
+  static Future<Map<String,dynamic>> onValueAddCommentHeritage(value) async{
+    return {
+      'status':true,
+      'message':'Heritage successfully Add Comment',
+       // 'body': value.data.toJson()
+    };
+  }
+
+  static Future<Map<String,dynamic>> onValueUserFavoriteHeritage(value) async{
+    return {
+      'status':true,
+      'message':'Heritage successfully Add Favorite',
+      // 'body': value.data.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueDeleteUserFavorite(value) async{
+    return {
+      'status':true,
+      'message':'Heritage successfully delete Favorite',
+      // 'body': value.data.toJson()
+    };
+  }
   static Future<Map<String,dynamic>> onValueDeleteHeritage(value) async{
     return {
       'status':true,
@@ -320,6 +403,16 @@ class FirebaseFun{
     return {
       'status':true,
       'message':'Heritages successfully fetch',
+      'body':value.docs
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchHeritagesCategory(value) async{
+    // print(true);
+    print("HeritagesCategory count : ${value.docs.length}");
+
+    return {
+      'status':true,
+      'message':'HeritagesCategory successfully fetch',
       'body':value.docs
     };
   }

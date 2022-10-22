@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:atharna/controller/heritage_provider.dart';
 import 'package:atharna/controller/home_provider.dart';
 import 'package:atharna/model/models.dart';
@@ -6,6 +8,7 @@ import 'package:atharna/view/resources/color_manager.dart';
 import 'package:atharna/view/resources/style_manager.dart';
 import 'package:atharna/view/resources/values_manager.dart';
 import 'package:atharna/view/screens/details_discover/details_discover_screen.dart';
+import 'package:atharna/widgets/future.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +30,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> word = ["All", "Madinah", "Asser", "Riyhad", "Jazan", "Alshrqe"];
-  var getListHeritages, getListHeritageTypes;
+  var getListHeritages;
   HomeProvider homeProvider = HomeProvider();
   HeritageProvider heritageProvider = HeritageProvider();
 
@@ -40,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
   getListHeritagesFuc() {
     getListHeritages = FirebaseFirestore.instance
         .collection(AppConstants.collectionHeritage)
-
         /// .orderBy("date")
         .snapshots();
     return getListHeritages;
@@ -70,22 +72,54 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
                 flex: 3,
-                child: Column(
+                 child: Column(
                   children: [
                     ChangeNotifierProvider<HomeProvider>.value(
                       value: HomeProvider(),
                       child: Consumer<HomeProvider>(
                           builder: (context, value, child) => SizedBox(
                                 height: Sizer.getW(context) * 0.1,
-                                child: buildTabBar(value),
+                                child:  buildTabBar(value)
                               )),
                     ),
                     const SizedBox(
                       height: AppSize.s10,
                     ),
-                    buildDiscover(context),
+                    StreamBuilder<QuerySnapshot>(
+                      //prints the messages to the screen0
+                        stream: getListHeritages,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return
+                             /// Const.SHOWLOADINGINDECATOR();
+                              waitDiscover(context);
+                          }
+                          else if (snapshot.connectionState ==
+                              ConnectionState.active) {
+                            if (snapshot.hasError) {
+                              return const Text('Error');
+                            } else if (snapshot.hasData) {
+                             /// Const.SHOWLOADINGINDECATOR();
+                              waitDiscover(context);
+                              heritageProvider.listHeritages=Heritages.fromJson(snapshot.data!.docs);
+                              heritageProvider.sortByCategory(homeProvider.selectIndex);
+                              print("All Heritage : ${snapshot.data!.docs.length}");
+                              print("Heritage By City : ${heritageProvider.listHeritageCity.length}");
+                              return buildDiscover(context);
+                              /// }));
+                            } else {
+                              return const Text('Empty data');
+                            }
+                          }
+                          else {
+                            return Text('State: ${snapshot.connectionState}');
+                          }
+                        }),
+
                   ],
-                )),
+                )
+
+            ),
             const SizedBox(
               height: AppSize.s10,
             ),
@@ -122,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ListView buildTabBar(HomeProvider value) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: word.length,
+      itemCount: heritageProvider.listHeritageCity.length,
       itemBuilder: ((context, index) => InkWell(
             onTap: () {
               value.changeIndex(index);
@@ -163,6 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: InkWell(
                 onTap: (){
+                  heritageProvider.listHeritagesCategory.heritages.clear();
                   Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ShowCategoriesScreen(
                     name: AppConstants.categoriesList[i].name,
                   )));
@@ -215,9 +250,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Expanded(
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 10,
+          itemCount: heritageProvider.listHeritagesByCity.heritages.length,
           itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
+                  heritageProvider.heritage=heritageProvider.listHeritagesByCity.heritages[index];
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -227,42 +263,58 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(AppPadding.p12),
                   margin: EdgeInsets.only(left: index == 0 ? 0 : AppMargin.m12),
                   width: Sizer.getW(context) / 1.8,
-                  decoration: BoxDecoration(
+                 decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppSize.s14),
-                      image: DecorationImage(
+                       image: DecorationImage(
                           fit: BoxFit.fill, image: AssetImage("assets/1.png"))),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: Text("Elephant Mountain",
-                              style: getBoldStyle(
-                                color: ColorManager.white,
-                                fontSize: Sizer.getW(context) / 16,
-                              )),
-                        ),
-                        const SizedBox(
-                          height: AppSize.s4,
-                        ),
-                        Row(
+                  child: Stack(
+                  //  fit: StackFit.expand,
+                    children: [
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(
-                              Icons.location_pin,
-                              color: ColorManager.white,
-                              size: Sizer.getW(context) * 0.075,
-                            ),
                             Flexible(
-                                child: Text(
-                              "Al-Ula",
-                              style: getLightStyle(color: ColorManager.white, fontSize: Sizer.getW(context) / 24)
-                            ))
-                          ],
-                        )
-                      ]),
+                              child: Text(
+                                  '${heritageProvider.listHeritagesByCity.heritages[index].firstName}'
+                                      ' ${heritageProvider.listHeritagesByCity.heritages[index].lastName}',
+                                  ///"Elephant Mountain",
+                                  style: getBoldStyle(
+                                    color: ColorManager.white,
+                                    fontSize: Sizer.getW(context) / 16,
+                                  )),
+                            ),
+                            const SizedBox(
+                              height: AppSize.s4,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_pin,
+                                  color: ColorManager.white,
+                                  size: Sizer.getW(context) * 0.075,
+                                ),
+                                Flexible(
+                                    child: Text(
+                                        "Al-Ula",
+                                        style: getLightStyle(color: ColorManager.white, fontSize: Sizer.getW(context) / 24)
+                                    ))
+                              ],
+                            )
+                          ])
+                    ],
+                  ),
                 ),
               )),
     );
+  }
+  ///wait
+  Widget waitDiscover(BuildContext context){
+    if(heritageProvider.listHeritageCity.length<=0){
+      return Const.SHOWLOADINGINDECATOR();
+    }else {
+     return buildDiscover(context);
+    }
   }
 
   Row buildAppBarHome(BuildContext context) {
