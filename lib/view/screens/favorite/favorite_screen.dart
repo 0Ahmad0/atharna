@@ -100,27 +100,27 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 boxShadow: [
                   BoxShadow(color: ColorManager.lightGray,blurRadius: AppSize.s8,offset: Offset(0,4))
                 ],
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(ColorManager.black.withOpacity(.35), BlendMode.darken),
-                    image: AssetImage("assets/1.png")
-                )
+
             ),
-            child: CacheNetworkImage(photoUrl: heritageProvider.listHeritagesFavorite.heritages[index].photoUrl,
-                width: Sizer.getH(context) / 1.8,
-                height: Sizer.getH(context) / 1.8,
-                waitWidget:  Image.asset(
-                  "assets/1.png",
-                  fit: BoxFit.fill,
-                  width: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppSize.s14),
+              child: CacheNetworkImage(
+                  photoUrl: heritageProvider.listHeritagesFavorite.heritages[index].photoUrl,
+                  width: Sizer.getH(context) / 1.8,
                   height: Sizer.getH(context) / 1.8,
-                ),
-                errorWidget: Image.asset(
-                  "assets/1.png",
-                  fit: BoxFit.fill,
-                  width: double.infinity,
-                  height: Sizer.getH(context) / 1.8,
-                )),
+                  waitWidget:  Image.asset(
+                    "assets/1.png",
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                    height: Sizer.getH(context) / 1.8,
+                  ),
+                  errorWidget: Image.asset(
+                    "assets/1.png",
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                    height: Sizer.getH(context) / 1.8,
+                  )),
+            ),
 
           ),
           Positioned(

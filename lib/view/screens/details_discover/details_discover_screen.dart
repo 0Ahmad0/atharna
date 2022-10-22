@@ -38,7 +38,7 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 child: Stack(
                   children: [
                    CacheNetworkImage(photoUrl: heritageProvider.heritage.photoUrl,
-                       width: Sizer.getH(context) / 1.8,
+                       width: double.infinity,
                        height: Sizer.getH(context) / 1.8,
                        waitWidget:  Image.asset(
                          "assets/1.png",
