@@ -43,7 +43,7 @@ class AddRuinProvider extends ChangeNotifier{
        heritage=Heritage(id: "",
            userId: userId,
            firstName: firstName.text, lastName: lastName.text,
-           photoUrl: "",
+           photoUrl: url,
            heritageType: heritageType.text,
            latitude: locationHeritage['latitude'],
            longitude: locationHeritage['longitude'],

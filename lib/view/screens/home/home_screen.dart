@@ -270,6 +270,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Stack(
                   //  fit: StackFit.expand,
                     children: [
+                      CacheNetworkImage(photoUrl: heritageProvider.listHeritagesByCity.heritages[index].photoUrl,
+                          width: Sizer.getH(context) / 1.8,
+                          height: Sizer.getH(context) / 1.8,
+                          waitWidget:  Image.asset(
+                            "assets/1.png",
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                            height: Sizer.getH(context) / 1.8,
+                          ),
+                          errorWidget: Image.asset(
+                            "assets/1.png",
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                            height: Sizer.getH(context) / 1.8,
+                          )),
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.end,

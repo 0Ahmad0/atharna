@@ -3,6 +3,7 @@ import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/consts_manager.dart';
 import 'package:atharna/view/screens/map_location.dart/map_location_screen.dart';
 import 'package:atharna/view/widgets/custome_button.dart';
+import 'package:atharna/widgets/picture/cach_picture_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -36,12 +37,21 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                
                 child: Stack(
                   children: [
-                    Image.asset(
-                      "assets/2.png",
-                    fit: BoxFit.fill,
-                      width: double.infinity,
-                      height: Sizer.getH(context) / 1.8,
-                    ),
+                   CacheNetworkImage(photoUrl: heritageProvider.heritage.photoUrl,
+                       width: Sizer.getH(context) / 1.8,
+                       height: Sizer.getH(context) / 1.8,
+                       waitWidget:  Image.asset(
+                         "assets/1.png",
+                         fit: BoxFit.fill,
+                         width: double.infinity,
+                         height: Sizer.getH(context) / 1.8,
+                       ),
+                       errorWidget: Image.asset(
+                         "assets/1.png",
+                         fit: BoxFit.fill,
+                         width: double.infinity,
+                         height: Sizer.getH(context) / 1.8,
+                       )),
                     Container(
                       padding: EdgeInsets.all(AppPadding.p12),
                       color: ColorManager.black.withOpacity(.5),
