@@ -127,10 +127,13 @@ class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
                 )
                 ///Image.asset(ImagesAssets.categoriesIMG2)
             ),
+
             Expanded(
               child: ListTile(
                 title: buildContent(context,index),
-                subtitle: Row(
+                subtitle:
+                (heritageProvider.heritage.category!.contains("ACTIVITES"))?
+                  Row(
                   children: [
                     Expanded(child: Row(
                       children: [
@@ -145,9 +148,11 @@ class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
                       ],
                     )),
                   ],
-                ),
+                )
+                    :SizedBox(),
               ),
-            ),
+            )
+            ,
           ],
         ),
       ),
