@@ -260,63 +260,74 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (ctx) => DetailsDiscoverScreen()));
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(AppPadding.p12),
                   margin: EdgeInsets.only(left: index == 0 ? 0 : AppMargin.m12),
                   width: Sizer.getW(context) / 1.8,
                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppSize.s14),
-                       image: DecorationImage(
-                          fit: BoxFit.fill, image: AssetImage("assets/1.png"))),
-                  child: Stack(
+                   borderRadius: BorderRadius.circular(AppSize.s14),
+                   boxShadow: [
+                     BoxShadow(
+                       color: ColorManager.lightGray.withOpacity(.2),
+                       blurRadius: AppSize.s8
+                     )
+                   ]
+                 ),
+                 child: Stack(
                   //  fit: StackFit.expand,
                     children: [
-                      CacheNetworkImage(photoUrl: heritageProvider.listHeritagesByCity.heritages[index].photoUrl,
-                          width: Sizer.getH(context) / 1.8,
-                          height: Sizer.getH(context) / 1.8,
-                          waitWidget:  Image.asset(
-                            "assets/1.png",
-                            fit: BoxFit.fill,
-                            width: double.infinity,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(AppSize.s14),
+                        child: CacheNetworkImage(photoUrl: heritageProvider.listHeritagesByCity.heritages[index].photoUrl,
+                            width: Sizer.getH(context) / 1.8,
                             height: Sizer.getH(context) / 1.8,
-                          ),
-                          errorWidget: Image.asset(
-                            "assets/1.png",
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            height: Sizer.getH(context) / 1.8,
-                          )),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Flexible(
-                              child: Text(
-                                  '${heritageProvider.listHeritagesByCity.heritages[index].firstName}'
-                                      ' ${heritageProvider.listHeritagesByCity.heritages[index].lastName}',
-                                  ///"Elephant Mountain",
-                                  style: getBoldStyle(
+                            waitWidget:  Image.asset(
+                              "assets/1.png",
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              height: Sizer.getH(context) / 1.8,
+                            ),
+                            errorWidget: Image.asset(
+                              "assets/1.png",
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              height: Sizer.getH(context) / 1.8,
+                            )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(AppPadding.p12),
+
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                    '${heritageProvider.listHeritagesByCity.heritages[index].firstName}'
+                                        ' ${heritageProvider.listHeritagesByCity.heritages[index].lastName}',
+                                    ///"Elephant Mountain",
+                                    style: getBoldStyle(
+                                      color: ColorManager.white,
+                                      fontSize: Sizer.getW(context) / 16,
+                                    )),
+                              ),
+                              const SizedBox(
+                                height: AppSize.s4,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_pin,
                                     color: ColorManager.white,
-                                    fontSize: Sizer.getW(context) / 16,
-                                  )),
-                            ),
-                            const SizedBox(
-                              height: AppSize.s4,
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_pin,
-                                  color: ColorManager.white,
-                                  size: Sizer.getW(context) * 0.075,
-                                ),
-                                Flexible(
-                                    child: Text(
-                                        "Al-Ula",
-                                        style: getLightStyle(color: ColorManager.white, fontSize: Sizer.getW(context) / 24)
-                                    ))
-                              ],
-                            )
-                          ])
+                                    size: Sizer.getW(context) * 0.075,
+                                  ),
+                                  Flexible(
+                                      child: Text(
+                                          "Al-Ula",
+                                          style: getLightStyle(color: ColorManager.white, fontSize: Sizer.getW(context) / 24)
+                                      ))
+                                ],
+                              )
+                            ]),
+                      )
                     ],
                   ),
                 ),
