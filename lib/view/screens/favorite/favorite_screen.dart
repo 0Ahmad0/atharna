@@ -104,23 +104,28 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(AppSize.s14),
-              child: CacheNetworkImage(
+              child: ColorFiltered(
+                  colorFilter:
+                   ColorFilter.mode(
+                      ColorManager.black.withOpacity(.2), BlendMode.darken),
+                child: CacheNetworkImage(
 
-                  photoUrl: heritageProvider.listHeritagesFavorite.heritages[index].photoUrl,
-                  width: Sizer.getH(context) / 1.8,
-                  height: Sizer.getH(context) / 1.8,
-                  waitWidget:  Image.asset(
-                    "assets/1.png",
-                    fit: BoxFit.fill,
-                    width: double.infinity,
+                    photoUrl: heritageProvider.listHeritagesFavorite.heritages[index].photoUrl,
+                    width: Sizer.getH(context) / 1.8,
                     height: Sizer.getH(context) / 1.8,
-                  ),
-                  errorWidget: Image.asset(
-                    "assets/1.png",
-                    fit: BoxFit.fill,
-                    width: double.infinity,
-                    height: Sizer.getH(context) / 1.8,
-                  ),
+                    waitWidget:  Image.asset(
+                      "assets/1.png",
+                      fit: BoxFit.fill,
+                      width: double.infinity,
+                      height: Sizer.getH(context) / 1.8,
+                    ),
+                    errorWidget: Image.asset(
+                      "assets/1.png",
+                      fit: BoxFit.fill,
+                      width: double.infinity,
+                      height: Sizer.getH(context) / 1.8,
+                    ),
+                ),
               ),
             ),
 

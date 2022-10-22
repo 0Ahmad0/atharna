@@ -276,21 +276,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(AppSize.s14),
-                        child: CacheNetworkImage(photoUrl: heritageProvider.listHeritagesByCity.heritages[index].photoUrl,
-                            width: Sizer.getH(context) / 1.8,
-                            height: Sizer.getH(context) / 1.8,
-                            waitWidget:  Image.asset(
-                              "assets/1.png",
-                              fit: BoxFit.fill,
-                              width: double.infinity,
+                        child: ColorFiltered(
+                          colorFilter:
+                          ColorFilter.mode(
+                              ColorManager.black.withOpacity(.2), BlendMode.darken),
+
+                          child: CacheNetworkImage(photoUrl: heritageProvider.listHeritagesByCity.heritages[index].photoUrl,
+                              width: Sizer.getH(context) / 1.8,
                               height: Sizer.getH(context) / 1.8,
-                            ),
-                            errorWidget: Image.asset(
-                              "assets/1.png",
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              height: Sizer.getH(context) / 1.8,
-                            )),
+                              waitWidget:  Image.asset(
+                                "assets/1.png",
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                                height: Sizer.getH(context) / 1.8,
+                              ),
+                              errorWidget: Image.asset(
+                                "assets/1.png",
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                                height: Sizer.getH(context) / 1.8,
+                              )),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(AppPadding.p12),
@@ -371,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: Sizer.getW(context) * 0.14,
               waitWidget: WidgetProfilePicture(
                 name: profileProvider.user.name,
-                radius: AppSize.s30,
+                radius: AppSize.s4,
                 fontSize: Sizer.getW(context) / 10,
               ),
               errorWidget: WidgetProfilePicture(
