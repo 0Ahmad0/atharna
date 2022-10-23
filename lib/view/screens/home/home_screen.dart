@@ -261,17 +261,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(AppPadding.p4),
                   margin: EdgeInsets.only(left: i==0?0:AppMargin.m8),
                   width: Sizer.getW(context) / 3,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: ColorManager.primary),
-                      borderRadius: BorderRadius.circular(AppSize.s14)
-                  ),
+
                   child: Column(
                     children: [
                       Expanded(
                         child: Image.asset(AppConstants.categoriesList[i].image),
                       ),
                       SizedBox(height: AppSize.s1_5,),
-                      Text(AppConstants.categoriesList[i].name,style: getRegularStyle(color: ColorManager.lightGray,
+                      Text(AppConstants.categoriesList[i].name,style:
+                      getRegularStyle(color: ColorManager.blackGray,
                       ),)
                     ],
                   ),
