@@ -7,6 +7,7 @@ import 'package:atharna/widgets/picture/cach_picture_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -143,15 +144,62 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 child:                 IconButton(onPressed: (){}, icon: Icon(Icons.comment,size: Sizer.getW(context) * 0.08,)),
           
                 ),
-                 buildDetailsRow(context,
+                 InkWell(
+                   onTap: (){
+                     showDialog(
+                         context: context,
+                         builder: (ctx){
+                           return Center(
+                             child: Container(
+                               margin: EdgeInsets.symmetric(
+                                 horizontal: AppMargin.m12
+                               ),
+                               height: Sizer.getW(context) * 0.4,
+                               padding: EdgeInsets.all(AppSize.s14),
+                               decoration: BoxDecoration(
+                                 color: ColorManager.white,
+                                 borderRadius: BorderRadius.circular(AppSize.s4)
+                               ),
+                               child: Column(
+                                 mainAxisAlignment: MainAxisAlignment.center,
+                                 children: [
+                                   RatingBar.builder(
+                                     glowColor: Colors.transparent,
+                                     initialRating: 3,
+                                     minRating: 1,
+                                     direction: Axis.horizontal,
+                                     allowHalfRating: true,
+                                     itemCount: 5,
+                                     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                     itemBuilder: (context, _) => Icon(
+                                       Icons.star,
+                                       color: Colors.amber,
+                                     ),
+                                     onRatingUpdate: (rating) {
+                                       print(rating);
+                                     },
+                                   ),
+                                   const SizedBox(height: AppSize.s12,),
+                                   ButtonApp(text: "Rate", onTap: (){
+                                     Navigator.pop(context);
+                                   })
+                                 ],
+                               ),
+                             ),
+                           );
+                         });
+
+                   },
+                   child: buildDetailsRow(context,
                 lable: "RATING",
                 child:Row(
-                  children: [
-                    Text("4.5",style:getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
-                    Text("/5",style:getBoldStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) *0.04))
-                  ],
-                )                 
+                    children: [
+                      Text("4.5",style:getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
+                      Text("/5",style:getBoldStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) *0.04))
+                    ],
                 )
+                ),
+                 )
                 ,buildDetailsRow(context,
                 lable: "REVIEWS",
                 child:Row(

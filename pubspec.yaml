@@ -55,6 +55,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   intl: ^0.17.0
   circle_progress_bar: ^0.1.2
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
