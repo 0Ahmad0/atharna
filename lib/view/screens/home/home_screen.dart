@@ -59,9 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             buildAppBarHome(context),
-            const SizedBox(
-              height: AppSize.s10,
-            ),
             Text("Discover",
                 style: getBoldStyle(
                   color: ColorManager.black,
@@ -71,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: AppSize.s10,
             ),
             Expanded(
-                flex: 3,
+                flex: 5,
                  child:
 
                              ChangeNotifierProvider<HomeProvider>.value(

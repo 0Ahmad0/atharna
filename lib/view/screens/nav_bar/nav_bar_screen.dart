@@ -117,7 +117,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
 
                      
                   _buildListTile(
-                    text: "Item1",
+                    text: "Account",
                     icon: Icons.settings,
                     onTap: (){
                       Navigator.pop(context);
@@ -125,6 +125,19 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     },
                   ),
                
+                  Divider(
+                    thickness: AppSize.s1_5,
+                    height: 0.0,
+                  ),
+                  _buildListTile(
+                    text: "Findings",
+                    icon: Icons.search,
+                    onTap: (){
+                      Navigator.pop(context);
+                      // Navigator.push(context, MaterialPageRoute(builder: (ctx)=>SettingView()));
+                    },
+                  ),
+
                   Divider(
                     thickness: AppSize.s1_5,
                     height: 0.0,

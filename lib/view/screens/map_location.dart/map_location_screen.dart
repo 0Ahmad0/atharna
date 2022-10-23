@@ -55,9 +55,9 @@ class MapLocation extends StatelessWidget {
                Expanded(
                  child: CustomTextFiled(controller: comment,
                   validator: (String? val){
-                    if(val!.trim().isEmpty){
-                      return "type any thing";
-                    }
+                    // if(val!.trim().isEmpty){
+                    //   return "type any thing";
+                    // }
                   }, onChange: null,
                   maxLength: null,
                    prefixIcon: Icons.comment,
