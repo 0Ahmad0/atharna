@@ -157,21 +157,6 @@ class FirebaseFun{
     }).catchError(onError);
     return result;
   }
-  static createHeritageCategory( {required model.Heritage heritage}) async {
-    final result= await FirebaseFirestore.instance.collection(AppConstants.collectionHeritageCategory).add(
-        heritage.toJson()
-    ).then((value){
-      heritage.id=value.id;
-      return {
-        'status':true,
-        'message':'HeritageCategory successfully created',
-        'body': {
-          'id':value.id
-        }
-      };
-    }).catchError(onError);
-    return result;
-  }
   static createReportHeritage( {required model.Heritage heritage}) async {
     final result= await FirebaseFirestore.instance.collection(AppConstants.collectionReportHeritage).add(
         heritage.toJson()
@@ -203,16 +188,16 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
-  static addUserFavoriteHeritage( {required model.Heritage heritage,required String collection}) async {
-    final result =await FirebaseFirestore.instance.collection(collection)
+  static addUserFavoriteHeritage( {required model.Heritage heritage}) async {
+    final result =await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage)
         .doc(heritage.id).update(
         heritage.toJson()
     ).then(onValueUserFavoriteHeritage)
         .catchError(onError);
     return result;
   }
-  static deleteUserFavoriteHeritage( {required model.Heritage heritage,required String collection}) async {
-    final result =await FirebaseFirestore.instance.collection(collection)
+  static deleteUserFavoriteHeritage( {required model.Heritage heritage}) async {
+    final result =await FirebaseFirestore.instance.collection(AppConstants.collectionHeritage)
         .doc(heritage.id).update(
         heritage.toJson()
     ).then(onValueDeleteUserFavorite)

@@ -417,11 +417,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     authProvider.phoneNumber = phoneController;
     authProvider.password = passwordController;
     authProvider.confirmPassword = passwordConfirmationController;
-    await authProvider.signup(context);
+    Const.LOADIG(context);
+   var result =await authProvider.signup(context);
+    Navigator.pop(context);
     Future.delayed(Duration(milliseconds: 800), () {
       setState(() {
         _isLoading = false;
       });
+      if(result['status'])
      Navigator.push(context, MaterialPageRoute(builder: (context) => VerificatoinScreen()));
     });
   }

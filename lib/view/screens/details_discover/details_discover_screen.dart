@@ -69,7 +69,7 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                               Row(
                                 children: [
                                   Icon(Icons.location_pin,color: ColorManager.white,size: Sizer.getW(context)*0.075 ,),
-                                  Flexible(child: Text("Al-Ula",style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 24),))
+                                  Flexible(child: Text('${heritageProvider.heritage.city}'/*"Al-Ula"*/,style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context) / 24),))
                                 ],
                               )
                         ,SizedBox(height: Sizer.getW(context) * 0.2,)
@@ -105,8 +105,10 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                  children: [
                    const SizedBox(height: AppSize.s20,),
                    Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
                      children: [
-                       Text('${heritageProvider.heritage.phone}'
+                       Icon(Icons.phone,color: ColorManager.lightGray,size: Sizer.getW(context)*0.045,),
+                       Text(' ${heritageProvider.heritage.phone}'
                          ,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
                      ],
                    ),
@@ -117,13 +119,14 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                        Row(
                          children: [
                            Icon(Icons.timer_outlined,color: ColorManager.lightGray,size: Sizer.getW(context)*0.045,),
-                           Text("1PM - 10PM",style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
+                           Text(' ${DateFormat('hha').format(heritageProvider.heritage.toDate!)} - ${DateFormat('hha').format(heritageProvider.heritage.fromDate!)}'
+                             ,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
                          ],
                        ),
                        const SizedBox(width: AppSize.s8,),
                        Row(
                          children: [
-                           Text('${DateFormat.yMd().format(heritageProvider.heritage.fromDate!)}'
+                           Text('${DateFormat.yMd().format(heritageProvider.heritage.toDate!)}'
                              ,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/26),)
                          ],
                        ),
@@ -156,7 +159,7 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
                 lable: "REVIEWS",
                 child:Row(
                   children: [
-                    Text('${heritageProvider.heritage.listUserComment.values.length}'/*"320"*/,style: getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
+                    Text('${heritageProvider.heritage.listUserComment!.values.length}'/*"320"*/,style: getBoldStyle(color: Theme.of(context).primaryColor,fontSize: Sizer.getW(context) *0.08)),
                     Text(" comments",style:getBoldStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context) *0.02))
                   ],
                 )                 
@@ -190,10 +193,10 @@ String cap = "Jabal AlFil (Elephant Rock), is an amazing geomorphological wonder
             child:StatefulBuilder(builder: ((context, setState2) => IconButton(onPressed: () async {
               isFav = !isFav;
               String collection=AppConstants.collectionHeritage;
-              if(heritageProvider.heritage.phone!=null){
-                collection=AppConstants.collectionHeritageCategory;
+              var result=await heritageProvider.changeUserFavorite(context,isFav, profileProvider.user.id);
+              if(result['status']){
+                isFav = !isFav;
               }
-              await heritageProvider.changeUserFavorite(context,isFav, profileProvider.user.id,collection: collection);
               setState2((){});
 
             }, icon: Icon(isFav?Icons.favorite:Icons.favorite_outline,

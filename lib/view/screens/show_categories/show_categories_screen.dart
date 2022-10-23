@@ -36,7 +36,7 @@ class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
   getListHeritagesCategoryFuc() {
     print(widget.name);
      getListHeritagesCategory = FirebaseFirestore.instance
-        .collection(AppConstants.collectionHeritageCategory)
+        .collection(AppConstants.collectionHeritage)
     .where('category',isEqualTo: widget.name)
     /// .orderBy("date")
         .snapshots();
@@ -96,6 +96,7 @@ class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
     return InkWell(
       onTap: (){
         heritageProvider.heritage=heritageProvider.listHeritagesCategory.heritages[index];
+       // print("${heritageProvider.listHeritagesCategory.heritages[index].city}");
         Navigator.push(context, MaterialPageRoute(builder: (ctx)=>DetailsDiscoverScreen()));},
 
       child: Container(
@@ -132,13 +133,14 @@ class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
               child: ListTile(
                 title: buildContent(context,index),
                 subtitle:
-                (heritageProvider.heritage.category!.contains("ACTIVITES"))?
+                (widget.name.contains("ACTIVITIES"))?
                   Row(
                   children: [
                     Expanded(child: Row(
                       children: [
                         Icon(Icons.timer_outlined,color: ColorManager.lightGray,size: Sizer.getW(context)*0.045,),
-                        Text("1PM - 10PM",style: getRegularStyle(color: ColorManager.lightGray),)
+                        Text(' ${DateFormat('hha').format(heritageProvider.listHeritagesCategory.heritages[index].toDate!)}-${DateFormat('hha').format(heritageProvider.listHeritagesCategory.heritages[index].fromDate!)}'
+                          ,style: getRegularStyle(color: ColorManager.lightGray),)
                       ],
                     )),
                     Expanded(child: Row(
@@ -186,10 +188,10 @@ class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
   }
   ///wait
   Widget waitListCategory(BuildContext context){
-    if(heritageProvider.listHeritagesCategory.heritages.length<=0){
+   // if(heritageProvider.listHeritagesCategory.heritages.length<=0){
       return Const.SHOWLOADINGINDECATOR();
-    }else {
+   // }else {
       return buildListCategory(context);
-    }
+   // }
   }
 }

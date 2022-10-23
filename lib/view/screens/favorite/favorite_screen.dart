@@ -152,7 +152,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 Container(
                   width: Sizer.getW(context) / 2,
                   child: Text(
-                      '${heritageProvider.listHeritagesFavorite.heritages[index].firstName} ${heritageProvider.listHeritagesFavorite.heritages[index].lastName}'
+                      '${heritageProvider.listHeritagesFavorite.heritages[index].title}'
                       /*"Ryadh"*/,style: getBoldStyle(color: ColorManager.white,fontSize: Sizer.getW(context)/16).copyWith(
                       overflow: TextOverflow.ellipsis
                   )),
@@ -164,7 +164,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     const SizedBox(width: AppSize.s4,),
                     Container(
                       width: Sizer.getW(context) / 2,
-                      child: Text("Al_Oula",style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context)/20).copyWith(
+                      child: Text(heritageProvider.listHeritagesFavorite.heritages[index].city!/*"Al_Oula"*/,style: getLightStyle(color: ColorManager.white,fontSize: Sizer.getW(context)/20).copyWith(
                           overflow: TextOverflow.ellipsis
                       )),
                     ),

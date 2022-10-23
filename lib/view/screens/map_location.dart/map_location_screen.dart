@@ -82,7 +82,7 @@ class MapLocation extends StatelessWidget {
          ,Expanded(
            child: ListView.builder(
             controller: scrollController,
-            itemCount: heritageProvider.heritage.listUserComment.keys.length,
+            itemCount: heritageProvider.heritage.listUserComment!.keys.length,
             itemBuilder: ((context, index)
             {
              return buildComment(context, index);
@@ -140,7 +140,7 @@ class MapLocation extends StatelessWidget {
             child: CircleAvatar(),
           ),
           title: FutureBuilder(
-            future: heritageProvider.fetchNameUser(context, idUser: heritageProvider.heritage.listUserComment.keys.elementAt(index)),
+            future: heritageProvider.fetchNameUser(context, idUser: heritageProvider.heritage.listUserComment!.keys.elementAt(index)),
             builder: (
                 context,
                 snapshot,
@@ -167,7 +167,7 @@ class MapLocation extends StatelessWidget {
               }
             },
           ),
-          subtitle: Text('${heritageProvider.heritage.listUserComment[heritageProvider.heritage.listUserComment.keys.elementAt(index)]}'/*"This is Comment ${index+1}"*/,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/30)),
+          subtitle: Text('${heritageProvider.heritage.listUserComment![heritageProvider.heritage.listUserComment!.keys.elementAt(index)]}'/*"This is Comment ${index+1}"*/,style: getRegularStyle(color: ColorManager.lightGray,fontSize: Sizer.getW(context)/30)),
         ),
         Divider(
           height: 0,

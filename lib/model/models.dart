@@ -99,17 +99,20 @@ class Heritage {
   String? heritageType;
   String? phone;
   String? statusHeritage;
+  String? city;
   double? latitude;
+  double? rating;
   double? longitude;
   String description;
   DateTime date;
-  DateTime? toDate;
-  DateTime? fromDate;
+  DateTime? toDate=DateTime.now();
+  DateTime? fromDate=DateTime.now();
  List<String> listFavoriteUserID;
-  Map<String,dynamic> listUserComment;
+  Map<String,dynamic>? listUserComment;
+  Map<String,dynamic>? listUserRating;
   String? title;
   String? location;
-  String? category;
+  String category;
 
   Heritage(
       {required this.id,
@@ -117,15 +120,18 @@ class Heritage {
        this.userId,
        this.title,
        this.location,
-       this.category,
+       this.category="",
          this.firstName,
          this.lastName,
         required this.photoUrl,
          this.heritageType,
+         this.city,
          this.latitude,
          this.longitude,
+         this.rating=0,
          this.listFavoriteUserID=const[],
          this.listUserComment=const{},
+         this.listUserRating=const{},
         required this.date,
          this.fromDate,
          this.phone,
@@ -147,8 +153,11 @@ class Heritage {
         heritageType: data["heritageType"],
         latitude: data["latitude"],
         longitude: data["longitude"],
+      city: data["city"],
         date: data["date"].toDate(),
+     // rating: data["rating"],
         listUserComment: data["listUserComment"],
+      listUserRating: data["listUserRating"],
         statusHeritage: data["statusHeritage"],
         listFavoriteUserID: tempListFavoriteUserID,
         description: (data["description"]!=null)?data["description"]:"",
@@ -176,7 +185,10 @@ class Heritage {
       latitude: json["latitude"],
       longitude: json["longitude"],
       date: json["date"],
+      city: json["city"],
+      rating: json["rating"],
       listUserComment: json["listUserComment"],
+      listUserRating: json["listUserRating"],
       statusHeritage: json["statusHeritage"],
       listFavoriteUserID: tempListFavoriteUserID,
       description: (json["description"]!=null)?json["description"]:"",
@@ -199,12 +211,16 @@ class Heritage {
     'latitude':latitude,
     'longitude':longitude,
     'photoUrl':photoUrl,
+    'city':city,
+    'rating':rating,
     'listUserComment':listUserComment,
+    'listUserRating':listUserRating,
     'listFavoriteUserID':listFavoriteUserID,
     'description':description,
     'statusHeritage':statusHeritage,
     'date':date,
     'title':title,
+    'rating':rating,
     'location':location,
     'category':category,
     'toDate':toDate,

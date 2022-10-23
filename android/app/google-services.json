@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "822507437610",
+    "firebase_url": "https://atharna-8f15b-default-rtdb.firebaseio.com",
     "project_id": "atharna-8f15b",
     "storage_bucket": "atharna-8f15b.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "822507437610-gjhq0nmae1v81kld4prmfvotbucglhe1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.atharna",
+            "certificate_hash": "1abaff2929ced721a830b6b5c10c804dd9b41c6a"
+          }
+        },
         {
           "client_id": "822507437610-ug6g4vfnhuu1rtlr84grmaq2gj8tmqpd.apps.googleusercontent.com",
           "client_type": 1,

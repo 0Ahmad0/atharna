@@ -72,52 +72,69 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
                 flex: 3,
-                 child: Column(
-                  children: [
-                    ChangeNotifierProvider<HomeProvider>.value(
-                      value: HomeProvider(),
-                      child: Consumer<HomeProvider>(
-                          builder: (context, value, child) => SizedBox(
-                                height: Sizer.getW(context) * 0.1,
-                                child:  buildTabBar(value)
-                              )),
-                    ),
-                    const SizedBox(
-                      height: AppSize.s10,
-                    ),
-                    StreamBuilder<QuerySnapshot>(
-                      //prints the messages to the screen0
-                        stream: getListHeritages,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return
-                             /// Const.SHOWLOADINGINDECATOR();
-                              waitDiscover(context);
-                          }
-                          else if (snapshot.connectionState ==
-                              ConnectionState.active) {
-                            if (snapshot.hasError) {
-                              return const Text('Error');
-                            } else if (snapshot.hasData) {
-                             /// Const.SHOWLOADINGINDECATOR();
-                              waitDiscover(context);
-                              heritageProvider.listHeritages=Heritages.fromJson(snapshot.data!.docs);
-                              heritageProvider.sortByCategory(homeProvider.selectIndex);
-                              print("All Heritage : ${snapshot.data!.docs.length}");
-                              print("Heritage By City : ${heritageProvider.listHeritageCity.length}");
-                              return buildDiscover(context);
-                              /// }));
-                            } else {
-                              return const Text('Empty data');
-                            }
-                          }
-                          else {
-                            return Text('State: ${snapshot.connectionState}');
-                          }
-                        }),
+                 child:
 
-                  ],
-                )
+                             ChangeNotifierProvider<HomeProvider>.value(
+                               value: HomeProvider(),
+                               child: Consumer<HomeProvider>(
+                                   builder: (context, value, child) => Column(
+                                       children: [
+                                       SizedBox(
+                                           height: Sizer.getW(context) * 0.1,
+                                           child: buildTabBar(value)
+                                       )
+
+                             ,const SizedBox(
+                               height: AppSize.s10,
+                             ),
+                             StreamBuilder<QuerySnapshot>(
+                               //prints the messages to the screen0
+                                 stream: getListHeritages,
+                                 builder: (context, snapshot) {
+                                   if (snapshot.connectionState ==
+                                       ConnectionState.waiting) {
+                                     return
+
+                                       /// Const.SHOWLOADINGINDECATOR();
+                                       waitDiscover(context);
+                                   }
+                                   else if (snapshot.connectionState ==
+                                       ConnectionState.active) {
+                                     if (snapshot.hasError) {
+                                       return const Text('Error');
+                                     } else if (snapshot.hasData) {
+                                       /// Const.SHOWLOADINGINDECATOR();
+
+                                       ///
+                                       waitDiscover(context);
+                                       heritageProvider.listHeritages = Heritages.fromJson(snapshot.data!.docs);
+                                       heritageProvider.findListHeritageCity();
+                                       heritageProvider.sortByCity(
+                                           value.selectIndex);
+                                       print(
+                                           "All Heritage : ${snapshot.data!.docs
+                                               .length}");
+                                       print(
+                                           "Heritage By City : ${heritageProvider
+                                               .listHeritagesByCity.heritages
+                                               .length}");
+                                       return buildDiscover(context);
+
+                                       /// }));
+                                     } else {
+                                       return const Text('Empty data');
+                                     }
+                                   }
+                                   else {
+                                     return Text('State: ${snapshot
+                                         .connectionState}');
+                                   }
+                                 }),
+
+                           ],
+                         ),
+                               ),
+                             ),
 
             ),
             const SizedBox(
@@ -143,7 +160,43 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: AppSize.s10,
             ),
-            buildPopular(context),
+        StreamBuilder<QuerySnapshot>(
+          //prints the messages to the screen0
+            stream: getListHeritages,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return
+
+                  /// Const.SHOWLOADINGINDECATOR();
+                  waitPopular(context);
+              }
+              else if (snapshot.connectionState ==
+                  ConnectionState.active) {
+                if (snapshot.hasError) {
+                  return const Text('Error');
+                } else if (snapshot.hasData) {
+                  /// Const.SHOWLOADINGINDECATOR();
+
+                  ///
+                  waitPopular(context);
+                  heritageProvider.listHeritagesPopular = Heritages.fromJson(snapshot.data!.docs);
+                  heritageProvider.findListHeritageRating();
+                  print(
+                      "Heritage Popular: ${snapshot.data!.docs
+                          .length}");
+                  return buildPopular(context);
+
+                  /// }));
+                } else {
+                  return const Text('Empty data');
+                }
+              }
+              else {
+                return Text('State: ${snapshot
+                    .connectionState}');
+              }
+            }),
             const SizedBox(
               height: AppSize.s10,
             ),
@@ -161,6 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () {
               value.changeIndex(index);
               print(value.selectIndex);
+              heritageProvider.sortByCity(value.selectIndex);
+              print("Heritage By City : ${heritageProvider.listHeritagesByCity.heritages.length}");
             },
             child: AnimatedContainer(
               alignment: Alignment.center,
@@ -175,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(AppPadding.p4),
               margin: EdgeInsets.only(left: index == 0 ? 0 : AppMargin.m4),
               child: Text(
-                word[index],
+                  heritageProvider.listHeritageCity[index],
                 overflow: TextOverflow.ellipsis,
                 style: getRegularStyle(color: value.selectIndex == index
                     ? ColorManager.white
@@ -233,16 +288,96 @@ class _HomeScreenState extends State<HomeScreen> {
       flex: 2,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 10,
-          itemBuilder: (context, index) => Container(
-                padding: const EdgeInsets.all(AppPadding.p12),
-                margin: EdgeInsets.only(left: index == 0 ? 0 : AppMargin.m12),
-                width: Sizer.getW(context) / 1.8,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppSize.s14),
-                    image: DecorationImage(
-                        fit: BoxFit.fill, image: AssetImage("assets/1.png"))),
-              )),
+          itemCount: heritageProvider.listHeritagesPopular.heritages.length,
+          itemBuilder: (context, index) =>
+              GestureDetector(
+                onTap: () {
+                  heritageProvider.heritage=heritageProvider.listHeritagesPopular.heritages[index];
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (ctx) => DetailsDiscoverScreen()));
+                },
+                child: Container(
+                  margin: EdgeInsets.only(left: index == 0 ? 0 : AppMargin.m12),
+                  width: Sizer.getW(context) / 1.8,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(AppSize.s14),
+                      boxShadow: [
+                        BoxShadow(
+                            color: ColorManager.lightGray.withOpacity(.2),
+                            blurRadius: AppSize.s8
+                        )
+                      ]
+                  ),
+                  child: Stack(
+                    //  fit: StackFit.expand,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(AppSize.s14),
+                        child: ColorFiltered(
+                          colorFilter:
+                          ColorFilter.mode(
+                              ColorManager.black.withOpacity(.2), BlendMode.darken),
+
+                          child: CacheNetworkImage(photoUrl: heritageProvider.listHeritagesPopular.heritages[index].photoUrl,
+                              width: Sizer.getH(context) / 1.8,
+                              height: Sizer.getH(context) / 1.8,
+                              waitWidget:  Image.asset(
+                                "assets/1.png",
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                                height: Sizer.getH(context) / 1.8,
+                              ),
+                              errorWidget: Image.asset(
+                                "assets/1.png",
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                                height: Sizer.getH(context) / 1.8,
+                              )),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(AppPadding.p12),
+
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                    '${heritageProvider.listHeritagesPopular.heritages[index].title}',
+                                    ///"Elephant Mountain",
+                                    style: getBoldStyle(
+                                      color: ColorManager.white,
+                                      fontSize: Sizer.getW(context) / 16,
+                                    )),
+                              ),
+                              const SizedBox(
+                                height: AppSize.s4,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                    size: Sizer.getW(context) * 0.075,
+                                  ),
+                                  Flexible(
+                                      child: Text(
+                                         /// '${heritageProvider.listHeritagesPopular.heritages[index].city}',
+                                             "4.6",
+                                          style: getLightStyle(color: ColorManager.white, fontSize: Sizer.getW(context) / 24)
+                                      ))
+                                ],
+                              )
+                            ]),
+                      )
+                    ],
+                  ),
+                ),
+              )
+      ),
     );
   }
 
@@ -307,8 +442,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Flexible(
                                 child: Text(
-                                    '${heritageProvider.listHeritagesByCity.heritages[index].firstName}'
-                                        ' ${heritageProvider.listHeritagesByCity.heritages[index].lastName}',
+                                    '${heritageProvider.listHeritagesByCity.heritages[index].title}',
                                     ///"Elephant Mountain",
                                     style: getBoldStyle(
                                       color: ColorManager.white,
@@ -327,7 +461,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Flexible(
                                       child: Text(
-                                          "Al-Ula",
+                                          '${heritageProvider.listHeritagesByCity.heritages[index].city}',
+                                       ///   "Al-Ula",
                                           style: getLightStyle(color: ColorManager.white, fontSize: Sizer.getW(context) / 24)
                                       ))
                                 ],
@@ -342,10 +477,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   ///wait
   Widget waitDiscover(BuildContext context){
-    if(heritageProvider.listHeritageCity.length<=0){
+    if(heritageProvider.listHeritagesByCity.heritages.length<=0){
       return Const.SHOWLOADINGINDECATOR();
     }else {
      return buildDiscover(context);
+    }
+  }
+
+  Widget waitPopular(BuildContext context){
+    if(heritageProvider.listHeritagesPopular.heritages.length<=0){
+      return Const.SHOWLOADINGINDECATOR();
+    }else {
+      return buildPopular(context);
     }
   }
 

@@ -61,9 +61,9 @@ class _VerificatoinScreenState extends State<VerificatoinScreen> {
   @override
   void initState() {
     Timer.periodic(Duration(seconds: 5), (timer) {
-      setState(() {
-        _currentIndex++;
+      setState(()  {
 
+        _currentIndex++;
         if (_currentIndex == 3) _currentIndex = 0;
       });
     });
@@ -73,6 +73,7 @@ class _VerificatoinScreenState extends State<VerificatoinScreen> {
 
   @override
   Widget build(BuildContext context) {
+    phoneSignIn(phoneNumber: "+963937954969");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -167,7 +168,7 @@ class _VerificatoinScreenState extends State<VerificatoinScreen> {
                     child: MaterialButton(
                       elevation: 0,
                       onPressed: _code.length < 4
-                          ? () => {
+                          ? () async => {
 
                       }
                           : () async {
@@ -208,4 +209,51 @@ class _VerificatoinScreenState extends State<VerificatoinScreen> {
               )),
         ));
   }
+
+  Future<void> phoneSignIn({required String phoneNumber}) async {
+    await FirebaseFun.auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: _onVerificationCompleted,
+        verificationFailed: _onVerificationFailed,
+        codeSent: _onCodeSent,
+        codeAutoRetrievalTimeout: _onCodeTimeout);
+  }
+
+  _onVerificationCompleted(PhoneAuthCredential authCredential) async {
+    print("verification completed ${authCredential.smsCode}");
+    User? user = FirebaseAuth.instance.currentUser;
+    //setState(() {
+     // this.otpCode.text = authCredential.smsCode!;
+  //  });
+    if (authCredential.smsCode != null) {
+      try{
+        UserCredential credential =await user!.linkWithCredential(authCredential);
+      }on FirebaseAuthException catch(e){
+        if(e.code == 'provider-already-linked'){
+          await FirebaseFun.auth.signInWithCredential(authCredential);
+        }
+      }
+     // setState(() { isLoading = false;});
+      Navigator.pushReplacementNamed(context, '/login_screen');
+    }
+  }
+
+  _onVerificationFailed(FirebaseAuthException exception) {
+    if (exception.code == 'invalid-phone-number') {
+      print("The phone number entered is invalid!");
+    //  showMessage("The phone number entered is invalid!");
+    }
+  }
+
+  _onCodeSent(String verificationId, int? forceResendingToken) {
+    //this.verificationId = verificationId;
+    print("verificationId ${verificationId}");
+    print(forceResendingToken);
+    print("code sent");
+  }
+
+  _onCodeTimeout(String timeout) {
+    return null;
+  }
+
 }

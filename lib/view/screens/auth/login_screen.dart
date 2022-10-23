@@ -224,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  /**FadeInDown(
+                  FadeInDown(
                     delay: Duration(milliseconds: 400),
                     child: Center(
                       child:
@@ -235,14 +235,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPress: () async {
                           Const.LOADIG(context);
                          /// await CreateEnvironmentProvider().createAdmins(context);
-                          //await CreateEnvironmentProvider().createCategory(context);
+                          await CreateEnvironmentProvider().createHeritages(context);
                           ///await HeritageProvider().fetchHeritages();
                          /// await HeritageProvider().fetchHeritageTypes();
                           Navigator.pop(context);
                         },
                       ),
                     ),
-                  ),**/
+                  ),
                 ],
               ),
             ),

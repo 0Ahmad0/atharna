@@ -18,9 +18,10 @@ import '../view/resources/consts_manager.dart';
 
 class HeritageProvider with ChangeNotifier{
   Map<String,dynamic> cacheUser=Map<String,dynamic>();
-  models.Heritage heritage=models.Heritage(id: "", userId: "", firstName: "firstName", lastName: "lastName", photoUrl: "", heritageType: "heritageType", latitude: 0, longitude: 0, date: DateTime.now());
+  models.Heritage heritage=models.Heritage(id: "", userId: "", lastName: "lastName", photoUrl: "", heritageType: "heritageType", latitude: 0, longitude: 0, date: DateTime.now());
   models.Heritages listHeritages=models.Heritages(heritages: []);
   models.Heritages listHeritagesFavorite=models.Heritages(heritages: []);
+  ///City
   models.Heritages listHeritagesByCity=models.Heritages(heritages: []);
   ///models.HeritageTypes listHeritageTypes=models.HeritageTypes(heritageTypes: []);
   List<String> listHeritageCity=["All"];
@@ -28,17 +29,14 @@ class HeritageProvider with ChangeNotifier{
   models.Heritages listHeritagesCategory=models.Heritages(heritages: []);
   ///Search
   models.Heritages listHeritagesSearch=models.Heritages(heritages: []);
+  ///Popular
+  models.Heritages listHeritagesPopular=models.Heritages(heritages: []);
 
   fetchHeritages () async {
     var result= await FirebaseFun.fetchHeritages();
     if(result['status']){
       listHeritages=models.Heritages.fromJson(result['body']);
-     /// print("listHeritages: ${listHeritages.heritages.length}");
     }
-    sortByCategory(String category){
-
-    }
-
     return result;
   }
   fetchHeritagesCategory () async {
@@ -50,14 +48,32 @@ class HeritageProvider with ChangeNotifier{
 
     return result;
   }
-  sortByCategory(int indexCity){
+  findListHeritageCity(){
+    List<String> tempListHeritageCity=["All"];
+    for(models.Heritage element in listHeritages.heritages){
+      if(!tempListHeritageCity.contains(element.city)){
+        tempListHeritageCity.add(element.city!);
+      }
+    }
+    listHeritageCity=tempListHeritageCity;
+  }
+  findListHeritageRating(){
+    for(models.Heritage element in listHeritagesPopular.heritages){
+      double rating=0;
+      for(double rate in element.listUserRating!.values){
+        rating+=rate;
+      }
+      element.rating=rating/element.listUserRating!.values.length;
+    }
+  }
+  sortByCity(int indexCity){
     listHeritagesByCity=models.Heritages(heritages: []);
     if(indexCity==0){
       listHeritagesByCity=listHeritages;
     }else{
       listHeritages.heritages.forEach((element) {
-        ///if(element.heritageType.contains(l))
-        listHeritagesByCity.heritages.add(element);
+        if(element.city!.contains(listHeritageCity[indexCity]))
+          listHeritagesByCity.heritages.add(element);
       });
     }
   }
@@ -75,39 +91,46 @@ class HeritageProvider with ChangeNotifier{
   }
   addComment(context,String userId,String comment) async {
     models.Heritage tempHeritage=models.Heritage.fromMap(heritage.toJson());
-    tempHeritage.listUserComment[userId]=comment;
+    tempHeritage.listUserComment![userId]=comment;
     var result=await FirebaseFun.addCommentHeritage(heritage: tempHeritage);
     Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
     if(result['status']){
-      heritage.listUserComment[userId]=comment;
+      heritage.listUserComment![userId]=comment;
       notifyListeners();
     }
     return result;
   }
   searchHeritagesByCity(String  search,List listSearch){
+    List trimSearch=search.trim().split(' ');
     List<models.Heritage> tempListSearch=[];
     for(models.Heritage heritageElement in listSearch){
-      if('Alaula'.toLowerCase().contains(search.toLowerCase())){
+      if(heritageElement.city!.toLowerCase().contains(search.toLowerCase())){
         tempListSearch.add(heritageElement);
+      }else{
+        for(String element in trimSearch){
+          if(heritageElement.city!.toLowerCase().contains(element.toLowerCase())){
+            tempListSearch.add(heritageElement);
+          }
+        }
       }
     }
     return tempListSearch;
   }
-  changeUserFavorite(context,bool isFav,String userId,{required String collection}) async {
+  changeUserFavorite(context,bool isFav,String userId) async {
 
     var result;
     if(isFav){
-      result=await addUserFavorite(context, userId,collection: collection);
+      result=await addUserFavorite(context, userId);
     }else{
-      result=await deleteUserFavorite(context, userId,collection: collection);
+      result=await deleteUserFavorite(context, userId);
     }
     return result;
   }
-  addUserFavorite(context,String userId,{required String collection}) async {
+  addUserFavorite(context,String userId) async {
     models.Heritage tempHeritage=models.Heritage.fromMap(heritage.toJson());
     if(!tempHeritage.listFavoriteUserID.contains(userId))
     tempHeritage.listFavoriteUserID.add(userId);
-    var result=await FirebaseFun.addUserFavoriteHeritage(heritage: tempHeritage,collection:collection);
+    var result=await FirebaseFun.addUserFavoriteHeritage(heritage: tempHeritage);
     Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
     if(result['status']){
       if(!heritage.listFavoriteUserID.contains(userId)){
@@ -117,10 +140,10 @@ class HeritageProvider with ChangeNotifier{
     }
     return result;
   }
-  deleteUserFavorite(context,String userId,{required String collection}) async {
+  deleteUserFavorite(context,String userId) async {
     models.Heritage tempHeritage=models.Heritage.fromMap(heritage.toJson());
     tempHeritage.listFavoriteUserID.remove(userId);
-    var result=await FirebaseFun.deleteUserFavoriteHeritage(heritage: tempHeritage,collection:collection);
+    var result=await FirebaseFun.deleteUserFavoriteHeritage(heritage: tempHeritage);
     Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
     if(result['status']){
       heritage.listFavoriteUserID.remove(userId);

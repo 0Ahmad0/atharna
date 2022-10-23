@@ -21,7 +21,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final SearchController = TextEditingController();
-  var getListHeritageSearch,getListHeritages,getListHeritagesCategory;
+  var getListHeritageSearch;
   HeritageProvider heritageProvider = HeritageProvider();
   @override
   void initState() {
@@ -30,13 +30,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   getListHeritagesSearchFuc() async {
-     getListHeritagesCategory= FirebaseFun.fetchHeritagesCategory() ;
      getListHeritageSearch = FirebaseFirestore.instance
         .collection(AppConstants.collectionHeritage)
     /// .orderBy("date")
         .snapshots();
-   /// getListHeritageSearch=getListHeritages;
-    //getListHeritageSearch.addAll(getListHeritagesCategory);
     return getListHeritageSearch;
   }
   @override
@@ -76,11 +73,9 @@ Expanded(
           } else if (snapshot.hasData) {
             Const.SHOWLOADINGINDECATOR();
             heritageProvider.listHeritagesSearch=Heritages.fromJson(snapshot.data!.docs);
-           // print(getListHeritagesCategory['status']);
-           // heritageProvider.listHeritagesCategory=Heritages.fromJson(getListHeritagesCategory);
             print("Heritage : ${snapshot.data!.docs.length}");
             heritageProvider.listHeritagesSearch.heritages=heritageProvider.searchHeritagesByCity(SearchController.text, heritageProvider.listHeritagesSearch.heritages);
-
+            print("Heritage Search : ${snapshot.data!.docs.length}");
             return buildListSearch(context);
             /// }));
           } else {
@@ -104,9 +99,7 @@ Expanded(
       },child: Padding(
         padding: const EdgeInsets.all(AppPadding.p8),
         child: Text(
-          (heritageProvider.listHeritagesSearch.heritages[index].phone!=null)?
           '${heritageProvider.listHeritagesSearch.heritages[index].title}'
-          :'${heritageProvider.listHeritagesSearch.heritages[index].firstName} ${heritageProvider.listHeritagesSearch.heritages[index].lastName}'
             /*"Data ${index+1}"*/,style: TextStyle(fontSize: Sizer.getW(context) / 24),),
       ));
 

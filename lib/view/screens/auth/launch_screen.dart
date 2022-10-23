@@ -37,11 +37,11 @@ class _LaunchScreenState extends State<LaunchScreen> {
         profileProvider.updateUser(user:User.fromJson(result['body']));
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-                builder: (ctx) => HomeScreen()/*QuestionsView(indexTaken: [],)*/));
+                builder: (ctx) => HomeScreen()));
       }else{
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-                builder: (ctx) => OnBoardingScreen()));
+                builder: (ctx) => LoginScreen()));
       }
 
     }else{
