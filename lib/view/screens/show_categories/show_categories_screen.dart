@@ -118,13 +118,16 @@ class _ShowCategoriesScreenState extends State<ShowCategoriesScreen> {
                     color: ColorManager.primary,
                   borderRadius: BorderRadius.circular(AppSize.s8)
                 ),
-                child:CacheNetworkImage(
-                  photoUrl: '${heritageProvider.listHeritagesCategory.heritages[index].photoUrl}'
-                  , width: Sizer.getW(context) / 3.5,
-                  height: Sizer.getW(context) / 3.5,
-                  waitWidget: Image.asset(ImagesAssets.onBoardingIMG2),
-                  errorWidget: Image.asset(ImagesAssets.onBoardingIMG2),
+                child:ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSize.s4),
+                  child: CacheNetworkImage(
+                    photoUrl: '${heritageProvider.listHeritagesCategory.heritages[index].photoUrl}'
+                    , width: Sizer.getW(context) / 3.5,
+                    height: Sizer.getW(context) / 3.5,
+                    waitWidget: Image.asset(ImagesAssets.onBoardingIMG2),
+                    errorWidget: Image.asset(ImagesAssets.onBoardingIMG2),
 
+                  ),
                 )
                 ///Image.asset(ImagesAssets.categoriesIMG2)
             ),

@@ -23,7 +23,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 5), () {
       ///Navigator.pushReplacementNamed(context, '/login_screen');
     });
   }
@@ -69,7 +69,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
             SizedBox(height: 10,),
             Text(
               'Atharna',
-              
             ),
           ],
         ),

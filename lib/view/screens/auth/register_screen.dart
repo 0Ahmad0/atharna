@@ -190,6 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Stack(
                         children: [
                           InternationalPhoneNumberInput(
+
                             onInputChanged: (PhoneNumber number) {
                               print(number.phoneNumber);
                             },
