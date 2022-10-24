@@ -507,22 +507,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
               borderRadius: BorderRadius.circular(AppSize.s4),
               color: ColorManager.lightGray),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppSize.s4),
-            child: CacheNetworkImage(
-              photoUrl: '${profileProvider.user.photoUrl}',
-              width: Sizer.getW(context) * 0.14,
-              height: Sizer.getW(context) * 0.14,
-              waitWidget: WidgetProfilePicture(
-                name: profileProvider.user.name,
-                radius: AppSize.s4,
-                fontSize: Sizer.getW(context) / 10,
-              ),
-              errorWidget: WidgetProfilePicture(
-                name: profileProvider.user.name,
-                radius: AppSize.s30,
-                fontSize: Sizer.getW(context) / 10,
-              ),
+          child: CacheNetworkImage(
+            photoUrl: '${profileProvider.user.photoUrl}',
+            width: Sizer.getW(context) * 0.14,
+            height: Sizer.getW(context) * 0.14,
+            waitWidget: WidgetProfilePicture(
+              name: profileProvider.user.name,
+              radius: AppSize.s4,
+            ),
+            errorWidget: WidgetProfilePicture(
+              name: profileProvider.user.name,
+              radius: AppSize.s4,
             ),
           ),
         )

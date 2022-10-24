@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../view/resources/color_manager.dart';
 import '../../view/resources/values_manager.dart';
 
 class WidgetProfilePicture extends StatelessWidget {
@@ -15,14 +16,18 @@ class WidgetProfilePicture extends StatelessWidget {
      required this.name,
     this.role,
      required this.radius,
-     required this.fontSize,
+      this.fontSize = AppSize.s18,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: Colors.brown,
+    return Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: ColorManager.primary,
+        borderRadius: BorderRadius.circular(radius)
+      ),
+      
       child:
           Text(
             '${findFirstsCharFromText(name)}',
