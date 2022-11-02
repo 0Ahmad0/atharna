@@ -4,8 +4,10 @@ import 'package:atharna/view/screens/add_ruins/add_ruin_screen.dart';
 import 'package:atharna/view/screens/auth/login_screen.dart';
 import 'package:atharna/view/screens/favorite/favorite_screen.dart';
 import 'package:atharna/view/screens/home/home_screen.dart';
+import 'package:atharna/view/screens/ministry_culture/discoverd_sites/discoverd_sites_screen.dart';
 import 'package:atharna/view/screens/profile/profile_screen.dart';
 import 'package:atharna/view/screens/search/search_screen.dart';
+import 'package:atharna/view/screens/tourism/create_activity/create_activity_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -138,6 +140,31 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     },
                   ),
 
+
+                  Divider(
+                    thickness: AppSize.s1_5,
+                    height: 0.0,
+                  ),
+                  _buildListTile(
+                    text: "Create Activity",
+                    icon: Icons.create,
+                    onTap: () async {
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>CreateActivityScreen()));
+                    },
+
+                  ),
+                  Divider(
+                    thickness: AppSize.s1_5,
+                    height: 0.0,
+                  ),
+                  _buildListTile(
+                    text: "Discover Sites",
+                    icon: Icons.library_add_check_rounded,
+                    onTap: () async {
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>DiscoverSiteScreen()));
+                    },
+
+                  ),
                   Divider(
                     thickness: AppSize.s1_5,
                     height: 0.0,
@@ -147,7 +174,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
                     icon: Icons.logout,
                     onTap: () async {
                       Const.LOADIG(context);
-                       await profileProvider.logout(context);
+                      await profileProvider.logout(context);
                       Navigator.of(context).pop();
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>LoginScreen()));
                     },

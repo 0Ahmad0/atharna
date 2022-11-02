@@ -196,10 +196,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             '${FirebaseFun.findTextToast("Loading ..")}':
                         'Login',
                         onPress: () async {
-
                           !_isLoading?
                           (await performLogin(context)):"";
-
+                          FocusManager.instance.primaryFocus!.unfocus();
                         },
                       ),
                     ),

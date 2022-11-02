@@ -24,7 +24,7 @@ class CustomTextFiled extends StatefulWidget {
     this.textInputType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
     this.autoFocus = false,
-    this.maxLength = 0,
+    this.maxLength = null,
     required this.validator,
     required this.onChange,
     this.onSubmit,
