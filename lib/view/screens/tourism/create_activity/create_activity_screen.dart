@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:atharna/controller/add_ruin_provider.dart';
 import 'package:atharna/model/sizer.dart';
 import 'package:atharna/view/resources/style_manager.dart';
@@ -41,10 +42,6 @@ class CreateActivityScreen extends StatelessWidget {
             affinity: TextAffinity.upstream));
     }
   }
-  _selectTime(TimeOfDay time,BuildContext context) async {
-    _selectedTime = time;
-    activityTime.text=  _selectedTime.format(context);
-  }
 
 
   @override
@@ -54,15 +51,47 @@ class CreateActivityScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(AppPadding.p14),
           children: [
-            Text(
-              "Create Activity",
-              style: getBoldStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: Sizer.getW(context) / 14
-              ),),
-              const SizedBox(height: AppSize.s20,),
-              CustomTextFiled(
-                  controller: activityName,
+            FadeInDown(
+              delay: Duration(milliseconds: 200),
+              child: Row(
+                children: [
+                  BackButton(),
+                  Text(
+                    "Create Activity",
+                    style: getBoldStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: Sizer.getW(context) / 14
+                    ),),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSize.s20,),
+            FadeInDown(              delay: Duration(milliseconds: 300),
+
+              child: CustomTextFiled(
+                    controller: activityName,
+                    validator: (String? val){
+                      if(val!.trim().isEmpty){
+                        return "This filed is required!";
+                      }else{
+                        return null;
+                      }
+                    },
+                    onChange: null,
+                    prefixIcon: Icons.drive_file_rename_outline,
+                    hintText: "Activity Name"
+                ),
+            ),
+            const SizedBox(height: AppSize.s20,),
+            FadeInDown(              delay: Duration(milliseconds: 400),
+
+              child: CustomTextFiled(
+                readOnly: true,
+                  onTap: ()async{
+                  var location =await Provider.of<AddRuinProvider>(context,listen: false).pickLocation(context);
+                  print(location);
+                  },
+                  controller: activityLocation,
                   validator: (String? val){
                     if(val!.trim().isEmpty){
                       return "This filed is required!";
@@ -71,97 +100,95 @@ class CreateActivityScreen extends StatelessWidget {
                     }
                   },
                   onChange: null,
-                  prefixIcon: Icons.drive_file_rename_outline,
-                  hintText: "Activity Name"
+                  prefixIcon: Icons.location_on_sharp,
+                  hintText: "Activity Location"
               ),
-              const SizedBox(height: AppSize.s20,),
-            CustomTextFiled(
-              readOnly: true,
-                onTap: ()async{
-                var location =await Provider.of<AddRuinProvider>(context,listen: false).pickLocation(context);
-                print(location);
-                },
-                controller: activityLocation,
-                validator: (String? val){
-                  if(val!.trim().isEmpty){
-                    return "This filed is required!";
-                  }else{
-                    return null;
-                  }
-                },
-                onChange: null,
-                prefixIcon: Icons.location_on_sharp,
-                hintText: "Activity Location"
             ),
             const SizedBox(height: AppSize.s20,),
-            CustomTextFiled(
-                controller: activityDescription,
-                validator: (String? val){
-                  if(val!.trim().isEmpty){
-                    return "This filed is required!";
-                  }else{
-                    return null;
-                  }
-                },
-                onChange: null,
-                prefixIcon: Icons.chat_sharp,
-                hintText: "Activity Description"
-            ),
-            const SizedBox(height: AppSize.s20,),
-            CustomTextFiled(
-              onTap: ()async{
-                await _selectDate(context);
-              },
-              readOnly: true,
-                controller: activityDate,
-                validator: (String? val){
-                  if(val!.trim().isEmpty){
-                    return "This filed is required!";
-                  }else{
-                    return null;
-                  }
-                },
-                onChange: null,
-                prefixIcon: Icons.date_range,
-                hintText: "Activity Date"
-            ),
+            FadeInDown(              delay: Duration(milliseconds: 500),
 
+              child: CustomTextFiled(
+                  controller: activityDescription,
+                  validator: (String? val){
+                    if(val!.trim().isEmpty){
+                      return "This filed is required!";
+                    }else{
+                      return null;
+                    }
+                  },
+                  onChange: null,
+                  prefixIcon: Icons.chat_sharp,
+                  hintText: "Activity Description"
+              ),
+            ),
             const SizedBox(height: AppSize.s20,),
-            CustomTextFiled(
+            FadeInDown(              delay: Duration(milliseconds: 600),
+
+              child: CustomTextFiled(
                 onTap: ()async{
-                  await _selectTime(_selectedTime,context);
+                  await _selectDate(context);
                 },
                 readOnly: true,
-                controller: activityTime,
-                validator: (String? val){
-                  if(val!.trim().isEmpty){
-                    return "This filed is required!";
-                  }else{
-                    return null;
-                  }
-                },
-                onChange: null,
-                prefixIcon: Icons.access_time,
-                hintText: "Activity Time"
-            ),
-
-            const SizedBox(height: AppSize.s20,),
-            CustomTextFiled(
-                controller: activityPhone,
-                validator: (String? val){
-                  if(val!.trim().isEmpty){
-                    return "This filed is required!";
-                  }else{
-                    return null;
-                  }
-                },
-                onChange: null,
-                prefixIcon: Icons.phone_android,
-                hintText: "Activity Phone"
+                  controller: activityDate,
+                  validator: (String? val){
+                    if(val!.trim().isEmpty){
+                      return "This filed is required!";
+                    }else{
+                      return null;
+                    }
+                  },
+                  onChange: null,
+                  prefixIcon: Icons.date_range,
+                  hintText: "Activity Date"
+              ),
             ),
             const SizedBox(height: AppSize.s20,),
-            ButtonApp(text: "Create Activity", onTap: ()=>Navigator.pop(context))
+            FadeInDown(              delay: Duration(milliseconds: 700),
 
+              child: CustomTextFiled(
+                  onTap: ()async{
+                    TimeOfDay? newTime = await showTimePicker(
+                        context: context,
+                        initialTime: _selectedTime,
+                        initialEntryMode: TimePickerEntryMode.input);
+                    if (newTime == null) return;
+                    _selectedTime = newTime;
+                    activityTime.text=  _selectedTime.format(context);
+                  },
+                  readOnly: true,
+                  controller: activityTime,
+                  validator: (String? val){
+                    if(val!.trim().isEmpty){
+                      return "This filed is required!";
+                    }else{
+                      return null;
+                    }
+                  },
+                  onChange: null,
+                  prefixIcon: Icons.access_time,
+                  hintText: "Activity Time"
+              ),
+            ),
+            const SizedBox(height: AppSize.s20,),
+            FadeInDown(              delay: Duration(milliseconds: 800),
+
+              child: CustomTextFiled(
+                  controller: activityPhone,
+                  validator: (String? val){
+                    if(val!.trim().isEmpty){
+                      return "This filed is required!";
+                    }else{
+                      return null;
+                    }
+                  },
+                  onChange: null,
+                  prefixIcon: Icons.phone_android,
+                  hintText: "Activity Phone"
+              ),
+            ),
+            const SizedBox(height: AppSize.s20,),
+            FadeInDown(              delay: Duration(milliseconds: 900),
+                child: ButtonApp(text: "Create Activity", onTap: ()=>Navigator.pop(context)))
           ],
         ),
       ),
