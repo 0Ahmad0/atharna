@@ -9,13 +9,13 @@ One of my works is the application of "Our Monuments", an application to explore
 ## Screenshots
 <div>
 <img src='https://github.com/0Ahmad0/atharna/blob/master/screenshots/1679337255238.jpg' width="200px">
-  <span></span>
+
 <img src='https://github.com/0Ahmad0/atharna/blob/master/screenshots/1679337255256.jpg' width="200px">
-  <span></span>
+
  <img src='https://github.com/0Ahmad0/atharna/blob/master/screenshots/1679337255270.jpg' width="200px">
-  <span></span>
+
   <img src='https://github.com/0Ahmad0/atharna/blob/master/screenshots/1679337255307.jpg' width="200px">
-  <span></span>
+
   <img src='https://github.com/0Ahmad0/atharna/blob/master/screenshots/1679337255328.jpg' width="200px">
 <img src='https://github.com/0Ahmad0/atharna/blob/master/screenshots/1679337255349.jpg' width="200px">
 <img src='https://github.com/0Ahmad0/atharna/blob/master/screenshots/1679337255371.jpg' width="200px">
